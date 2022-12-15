@@ -1,0 +1,30 @@
+#input-field {
+    background-color: #1f2120;
+    border-color: white; 
+    border-radius: 25px 25px 25px 25px;
+    border-width: 1px;
+    background: url(media/pngfind.com-lupa-png-2773838.png) no-repeat left;
+    background-size: 20px;
+    padding-left: 50px;
+    background-position: left 15px top 15px;
+    
+     
+    
+}
+
+#input-field, textarea {
+    color: white;
+}
+
+#input-field:focus, textarea:focus {
+    outline: none;
+}
+
+#input-field:hover {
+    background-color: #313131;
+    border-width: 0px;
+}
+
+ul {
+    font-size: small;
+}
