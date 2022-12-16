@@ -28,3 +28,29 @@
 ul {
     font-size: small;
 }
+
+.jfk-textinput {
+    background-color: #1f2120;
+    border-color: white; 
+    border-width: 0.5px;
+    padding-left: 10px;
+    width: 100%;
+    
+    
+}
+
+.jfk-textinput {
+    background-color: #313131;
+    border-width: 0px;
+}
+
+.jfk-textinput, textarea {
+    color: white;
+}
+label, h5 {
+    color: white;
+    width: 300px;
+}
+ 
+
+
