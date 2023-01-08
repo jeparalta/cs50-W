@@ -1,13 +1,44 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django import forms
 
 from . import util
+
+class QueryForm(forms.Form):
+
+    query = forms.CharField(label="Search")
 
 
 def index(request):
 
+    if request.method == "POST":
+        form = QueryForm(request.POST)
+
+        if form.is_valid():
+            query = form.cleaned_data["query"].lower()
+        #print(query)
+            entries = util.list_entries()
+            matches = []
+            for entry in entries:
+                if entry.lower() == query:
+                    match = util.get_entry(query)
+                    return render(request, "encyclopedia/entry.html", {
+                        "entry": match
+                    })
+                elif query in entry.lower():
+                    
+                    matches.append(entry)
+            
+            print(matches)
+                    
+            return render(request, "encyclopedia/results.html", {
+                        "entries": matches
+                        })
+
+
+
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()  
+        "entries": util.list_entries(), "form": QueryForm()
     })
     
 
@@ -23,6 +54,7 @@ def entry(request, title):
         return render(request, "encyclopedia/entry.html", { 
         "title": title, "entry": entry
     })
+
 
 
 
