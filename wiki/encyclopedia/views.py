@@ -8,6 +8,11 @@ class QueryForm(forms.Form):
 
     query = forms.CharField(label="Search")
 
+class NewPageForm(forms.Form):
+    
+    title = forms.CharField(label="Title")
+    description = forms.CharField(label="Description")
+
 
 def index(request):
 
@@ -34,9 +39,6 @@ def index(request):
             return render(request, "encyclopedia/results.html", {
                         "entries": matches
                         })
-
-
-
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(), "form": QueryForm()
     })
@@ -55,7 +57,9 @@ def entry(request, title):
         "title": title, "entry": entry
     })
 
-
+def newpage(request):
+    
+    return render(request, "encyclopedia/newpage.html")
 
 
 
