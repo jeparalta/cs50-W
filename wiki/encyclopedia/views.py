@@ -11,7 +11,7 @@ class QueryForm(forms.Form):
 class NewPageForm(forms.Form):
     
     title = forms.CharField(label="Title")
-    description = forms.CharField(label="Description")
+    description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
 
 
 def index(request):
@@ -33,6 +33,10 @@ def index(request):
                 elif query in entry.lower():
                     
                     matches.append(entry)
+            if not matches:
+                return render(request, "encyclopedia/apology.html", {
+            "title": "An entry for this search"
+        })
             
             print(matches)
                     
@@ -58,8 +62,25 @@ def entry(request, title):
     })
 
 def newpage(request):
+
+    if request.method == "POST":
+        form = NewPageForm(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
+        # Check if an entry with this title exists
+        entries = util.list_entries()
+        for entry in entries:
+            if entry.lower() == title.lower():
+                return render(request, "encyclopedia/apology2.html", {
+                    "msg": "An entry with this name already exists!"
+                })
+
     
-    return render(request, "encyclopedia/newpage.html")
+    return render(request, "encyclopedia/newpage.html", {
+        "newpageform": NewPageForm()
+    })
 
 
 

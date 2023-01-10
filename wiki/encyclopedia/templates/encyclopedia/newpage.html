@@ -8,6 +8,14 @@
 
     
     <h1>Create a new page</h1>
+
+    <form action="{% url 'encyclopedia:newpage' %}" method="post">
+        {% csrf_token %}
+
+        {{ newpageform }}
+        <input type="submit" value="Save">
+    </form>
+    
     
 
 
