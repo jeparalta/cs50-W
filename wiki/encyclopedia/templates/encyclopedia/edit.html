@@ -7,17 +7,14 @@
 {% block body %}
 
     
-    <h1>Create a new Entry</h1>
+    <h1>Edit</h1>
 
-    <form action="{% url 'encyclopedia:newpage' %}" method="post">
+    <form action="{% url 'encyclopedia:update' %}" method="post">
         {% csrf_token %}
 
-        {{ newpageform }}
+        {{ editform }}
         <input type="submit" value="Save">
     </form>
     
-    
-
-
 
 {% endblock %}

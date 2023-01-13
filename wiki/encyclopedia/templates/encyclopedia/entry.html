@@ -5,5 +5,13 @@
 {% endblock %}
 
 {% block body %}
+    <h3>{{ title }}</h3>
     <p>{{ entry }}</p>
+    <form action="{% url 'encyclopedia:edit' %}" method="post">
+        {% csrf_token %}
+        <input hidden name="title" value="{{title}}">
+        <input hidden name="entry" value="{{entry}}">
+        <input type="submit" Value="Edit">
+    </form>
+    
 {% endblock %}
