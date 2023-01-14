@@ -35,3 +35,30 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+
+def HTML_convert(entry):
+    HTML_entry = entry
+
+    #Find "##" and convert to H2
+    heading_pattern = re.compile(r'(\B##\s?)([A-Za-z]?\w*)')
+    headings = heading_pattern.finditer(entry)
+    for heading in headings:
+        print(heading.group())
+        #print(f"<h1>{heading.group(2)}</h1>")
+        HTML_entry = HTML_entry.replace(f"{heading.group()}", f"<h2>{heading.group(2)}</h2>")
+
+    #Find "#" and convert to H1
+    heading_pattern = re.compile(r'(\B#\s?)([A-Za-z]?\w*)')
+    headings = heading_pattern.finditer(entry)
+    for heading in headings:
+        print(heading.group())
+        #print(f"<h1>{heading.group(2)}</h1>")
+        HTML_entry = HTML_entry.replace(f"{heading.group()}", f"<h1>{heading.group(2)}</h1>")
+        
+        #HTML_entry = f"<h1>{heading.group(2)}</h1>"
+    
+    
+        return HTML_entry
+
+    

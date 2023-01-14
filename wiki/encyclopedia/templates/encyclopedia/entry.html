@@ -5,8 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <h3>{{ title }}</h3>
-    <p>{{ entry }}</p>
+    {{ entry |safe }}
     <form action="{% url 'encyclopedia:edit' %}" method="post">
         {% csrf_token %}
         <input hidden name="title" value="{{title}}">

@@ -25,14 +25,13 @@ def index(request):
 
         if form.is_valid():
             query = form.cleaned_data["query"].lower()
-        #print(query)
             entries = util.list_entries()
             matches = []
             for entry in entries:
                 if entry.lower() == query:
                     match = util.get_entry(query)
                     return render(request, "encyclopedia/entry.html", {
-                        "entry": match
+                        "title": entry, "entry": match
                     })
                 elif query in entry.lower():
                     
@@ -56,13 +55,17 @@ def entry(request, title):
 
     entry = util.get_entry(title)
 
+    html = util.HTML_convert(entry)
+
+    #print(html)
+
     if entry == None:
         return render(request, "encyclopedia/apology.html", {
             "title": title
         })
     else:    
         return render(request, "encyclopedia/entry.html", { 
-        "title": title, "entry": entry
+            "title": title, "entry": html
     })
 
 def newpage(request):
@@ -106,7 +109,7 @@ def edit(request):
 
     if request.method == "POST":
 
-        # Display pre populated form to edit existing entry
+        # Display pre-populated form to edit existing entry
         title = request.POST["title"]
         description = request.POST["entry"]
         editform = EntryForm(initial={'title': f'{title}', 'description': f'{description}'})
@@ -118,17 +121,15 @@ def update(request):
 
     if request.method == "POST":
 
-        # Update existing entry from edited form
+        # Get updated info from edited form
         form = EntryForm(request.POST)
 
         if form.is_valid():
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
 
-        # Check that entry with this title exists and if so re-write descriptio
-        entries = util.list_entries()
-        #for entry in entries:
-            #if entry.lower() == title.lower():
+        
+        # Update existing entry from edited form
         f = open(f"entries/{title}.md", "w")
         f.write(f"{description}")
         f.close()
@@ -140,17 +141,19 @@ def update(request):
 
 def randomchoice(request):
 
+    # List all entries
     entries = util.list_entries()
-
+    # Choose 1 random entry
     randomchoice = random.choice(entries)
-
+    # get entry description
     entry = util.get_entry(randomchoice)
         
-
+    # Check if entry exists, if not return error msg
     if entry == None:
         return render(request, "encyclopedia/apology.html", {
-                "title": title
+                "title": randomchoice
         })
+    # If entry exists display entry page
     else:    
         return render(request, "encyclopedia/entry.html", { 
             "title": randomchoice, "entry": entry
