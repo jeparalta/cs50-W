@@ -90,6 +90,8 @@ def newpage(request):
 
 
         entry = util.get_entry(title)
+        # Convert to HTML
+        html = util.HTML_convert(entry)
         
 
         if entry == None:
@@ -98,7 +100,7 @@ def newpage(request):
             })
         else:    
             return render(request, "encyclopedia/entry.html", { 
-            "title": title, "entry": entry
+            "title": title, "entry": html
         })
 
     return render(request, "encyclopedia/newpage.html", {
@@ -111,7 +113,9 @@ def edit(request):
 
         # Display pre-populated form to edit existing entry
         title = request.POST["title"]
-        description = request.POST["entry"]
+        description = util.get_entry(title)
+        #description = request.POST["entry"] This option gets the html version
+        
         editform = EntryForm(initial={'title': f'{title}', 'description': f'{description}'})
         return render(request, "encyclopedia/edit.html", {
             "title": title, "entry": entry, "editform": editform
@@ -127,16 +131,20 @@ def update(request):
         if form.is_valid():
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
+            
 
         
         # Update existing entry from edited form
         f = open(f"entries/{title}.md", "w")
         f.write(f"{description}")
         f.close()
+
+        # Convert to HTML
+        html = util.HTML_convert(description)
         
 
         return render(request, "encyclopedia/entry.html", { 
-        "title": title, "entry": description
+        "title": title, "entry": html
         })
 
 def randomchoice(request):
@@ -147,6 +155,8 @@ def randomchoice(request):
     randomchoice = random.choice(entries)
     # get entry description
     entry = util.get_entry(randomchoice)
+    # Convert to HTML
+    html = util.HTML_convert(entry)
         
     # Check if entry exists, if not return error msg
     if entry == None:
@@ -156,7 +166,7 @@ def randomchoice(request):
     # If entry exists display entry page
     else:    
         return render(request, "encyclopedia/entry.html", { 
-            "title": randomchoice, "entry": entry
+            "title": randomchoice, "entry": html
         })
 
     

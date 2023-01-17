@@ -1,1 +1,0 @@
-#Dog ##Animal that is a pet to humans
