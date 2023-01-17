@@ -15,9 +15,6 @@ class EntryForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
 
 
-
-
-
 def index(request):
 
     if request.method == "POST":
@@ -30,8 +27,10 @@ def index(request):
             for entry in entries:
                 if entry.lower() == query:
                     match = util.get_entry(query)
+                    # Convert to HTML
+                    html = util.HTML_convert(match)
                     return render(request, "encyclopedia/entry.html", {
-                        "title": entry, "entry": match
+                        "title": entry, "entry": html
                     })
                 elif query in entry.lower():
                     
@@ -54,10 +53,7 @@ def index(request):
 def entry(request, title):
 
     entry = util.get_entry(title)
-
     html = util.HTML_convert(entry)
-
-    #print(html)
 
     if entry == None:
         return render(request, "encyclopedia/apology.html", {
@@ -88,12 +84,11 @@ def newpage(request):
         f.write(f"{description}")
         f.close()
 
-
         entry = util.get_entry(title)
+
         # Convert to HTML
         html = util.HTML_convert(entry)
         
-
         if entry == None:
             return render(request, "encyclopedia/apology.html", {
                 "title": title
@@ -114,7 +109,6 @@ def edit(request):
         # Display pre-populated form to edit existing entry
         title = request.POST["title"]
         description = util.get_entry(title)
-        #description = request.POST["entry"] This option gets the html version
         
         editform = EntryForm(initial={'title': f'{title}', 'description': f'{description}'})
         return render(request, "encyclopedia/edit.html", {
@@ -132,8 +126,6 @@ def update(request):
             title = form.cleaned_data["title"]
             description = form.cleaned_data["description"]
             
-
-        
         # Update existing entry from edited form
         f = open(f"entries/{title}.md", "w")
         f.write(f"{description}")
@@ -142,7 +134,6 @@ def update(request):
         # Convert to HTML
         html = util.HTML_convert(description)
         
-
         return render(request, "encyclopedia/entry.html", { 
         "title": title, "entry": html
         })

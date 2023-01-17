@@ -39,7 +39,6 @@ def get_entry(title):
 
 def HTML_convert(entry):
 
-
     HTML_entry = entry
 
     #Find "##" and convert to <h2>
@@ -61,41 +60,15 @@ def HTML_convert(entry):
         HTML_entry = HTML_entry.replace(f"{link.group()}", f"<a href='/encyclopedia/{link.group(8)}'>{link.group(8)}</a>")
     
     #Find bold text and convert to HTML <b>
-    bold_pattern = re.compile(r'(\*{2})(.*?)(\*{2})') # ([\*\*])
+    bold_pattern = re.compile(r'(\*{2})(.*?)(\*{2})') 
     bolded = bold_pattern.finditer(HTML_entry)
     for bold in bolded:
         HTML_entry = HTML_entry.replace(f"{bold.group()}", f"<b>{bold.group(2)}</b>")
 
     #Find untitled list and convert to HTML <ul>
-    list_pattern = re.compile(r'(\*\s?)([\w\s!]*)') # ([\*\*])
+    list_pattern = re.compile(r'(\*\s?)([\w\s!]*)') 
     list = list_pattern.finditer(HTML_entry)
     for item in list:
         HTML_entry = HTML_entry.replace(f"{item.group()}", f"<li>{item.group(2)}</li>")
-        #print(item.group())
-
-    #Find paragraph and convert to HTML <p>
-    
-    
-    blankline_pattern = re.compile(r'^\#')
-    blanklines = blankline_pattern.finditer(HTML_entry)
-    for blankline in blanklines:
-        
-        HTML_entry = HTML_entry.replace(f"{blankline.group()}", f"blank{blankline.group()}")
-        print(blankline)
-    #paragraph_pattern = re.compile(r'(.+?\n\n|.+?$)') # ([\*\*])
-    #paragraphs = paragraph_pattern.finditer(entry)
-    #for paragraph in paragraphs:
-        #HTML_entry = HTML_entry.replace(f"{paragraph.group()}", f"<p>{paragraph.group()}</p>")
-        #print(paragraph.group())
-
-
      
     return HTML_entry
-
-
-
-
-
-
-
-
