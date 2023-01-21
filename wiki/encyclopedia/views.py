@@ -45,7 +45,8 @@ def index(request):
             return render(request, "encyclopedia/results.html", {
                         "entries": matches
                         })
-    return render(request, "encyclopedia/index.html", {
+    else:
+        return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(), "form": QueryForm()
     })
     
@@ -53,13 +54,14 @@ def index(request):
 def entry(request, title):
 
     entry = util.get_entry(title)
-    html = util.HTML_convert(entry)
+    
 
     if entry == None:
         return render(request, "encyclopedia/apology.html", {
             "title": title
         })
-    else:    
+    else:  
+        html = util.HTML_convert(entry)  
         return render(request, "encyclopedia/entry.html", { 
             "title": title, "entry": html
     })
