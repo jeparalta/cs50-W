@@ -12,6 +12,7 @@ class User(AbstractUser):
 class Listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=200)
+    image = models.ImageField(null=True, blank=True, upload_to="auctions/static/auctions/")
     price = models.FloatField()
     date_added = models.DateTimeField(default=datetime.today)
     owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="listings")
