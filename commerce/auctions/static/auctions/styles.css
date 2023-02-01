@@ -1,3 +1,7 @@
 body {
     padding: 10px;
 }
+
+.row align-items-center {
+    background-color: blue;
+}

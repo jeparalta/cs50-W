@@ -5,12 +5,17 @@
 
     
         {% for listing in listings %}
-        <div>
-            <h4>{{ listing }}</h4>
-            <p>{{ listing.description }}</p>
-        </br>
-            <img src="{{ listing.image }}">
-        </br>
+        <div class="container-fluid">
+            <div class="row align-items-center border border-dark rounded">
+                <div class="col">
+                    <img src="{{ listing.image }}">
+                </div>
+                <div class="col">
+                    <h4>{{ listing }}</h4>
+                    <p>{{ listing.description }}</p>
+                    <p>Price: € {{ listing.price }}</p>
+                </div>
+            </div>
         
         </div>
     </br>

@@ -13,8 +13,9 @@ def index(request):
     
     user = request.user
 
-    print(user)
-    user_listings = Listing.objects.filter(owner=user)
+    #print(user)
+    #user_listings = Listing.objects.filter(owner=user)
+    user_listings = Listing.objects.all()
     print(user_listings)
     return render(request, "auctions/index.html", {
         "listings": user_listings   #Listing.objects.all()
