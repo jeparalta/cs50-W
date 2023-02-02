@@ -4,8 +4,17 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms
 
-from .models import User, Listing
+from .models import User, Listing, Bid, Comment
+
+class NewListingForm(forms.Form):
+
+    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
+    price = forms.DecimalField(max_digits=6, decimal_places=2, label="Starting Bid $")
+    image = forms.ImageField()
+
 
 @login_required
 def index(request):
@@ -15,10 +24,10 @@ def index(request):
 
     #print(user)
     #user_listings = Listing.objects.filter(owner=user)
-    user_listings = Listing.objects.all()
-    print(user_listings)
+    listings = Listing.objects.all()
+    
     return render(request, "auctions/index.html", {
-        "listings": user_listings   #Listing.objects.all()
+        "listings": listings   #Listing.objects.all()
     })
 
 
@@ -72,3 +81,31 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+def newlisting(request):
+    if request.method == "POST":
+        #newtitle = request.post("title")
+        #description = request.post("description")
+        #price = request.post("price")
+        #image = request.post("image")
+        form = NewListingForm(data=request.POST, files=request.FILES)
+        if form.is_valid:
+            listing = Listing(owner = request.user,
+                            title=request.POST["title"], 
+                            description = request.POST["description"],
+                            price = request.POST["price"],
+                            image = f"static/auctions/{request.POST['image']}")
+                            
+            listing.save()
+
+
+
+
+
+            return HttpResponseRedirect(reverse("auctions:index"))
+
+
+
+    return render(request, "auctions/newlisting.html", {
+        "form": NewListingForm
+    })

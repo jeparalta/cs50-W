@@ -12,7 +12,7 @@ class QueryForm(forms.Form):
 class EntryForm(forms.Form):
     
     title = forms.CharField(label="Title")
-    description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
+    description = forms.CharField(widget=forms.Textarea())
 
 
 def index(request):
