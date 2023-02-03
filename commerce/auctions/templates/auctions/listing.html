@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ listing.title }}</h2>
+</br>
+
+    
+    <img src="{{ listing.image.url }}">
+  
+</br>
+       
+    <p>{{ listing.description }}</p>
+    <p>Price: € {{ listing.price }}</p>
+</br>
+    <p style="color: grey; font-size: small; font-style: italic;">Date added: {{ listing.date_added }} </p>
+    
+
+
+
+
+
+{% endblock %}

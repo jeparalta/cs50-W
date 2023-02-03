@@ -20,10 +20,10 @@ class NewListingForm(forms.Form):
 def index(request):
 
     
-    user = request.user
-
+    #user = request.user
     #print(user)
     #user_listings = Listing.objects.filter(owner=user)
+
     listings = Listing.objects.all()
     
     return render(request, "auctions/index.html", {
@@ -42,7 +42,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("auctions:index"))
         else:
             return render(request, "auctions/login.html", {
                 "message": "Invalid username and/or password."
@@ -53,7 +53,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("login"))
+    return HttpResponseRedirect(reverse("auctions:login"))
 
 
 def register(request):
@@ -78,7 +78,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("auctions:index"))
     else:
         return render(request, "auctions/register.html")
 
@@ -88,13 +88,15 @@ def newlisting(request):
         #description = request.post("description")
         #price = request.post("price")
         #image = request.post("image")
-        form = NewListingForm(data=request.POST, files=request.FILES)
+        form = NewListingForm(request.POST, request.FILES)
         if form.is_valid:
+            
             listing = Listing(owner = request.user,
                             title=request.POST["title"], 
                             description = request.POST["description"],
                             price = request.POST["price"],
-                            image = f"static/auctions/{request.POST['image']}")
+                            image = request.FILES['image']
+            )
                             
             listing.save()
 
@@ -109,3 +111,13 @@ def newlisting(request):
     return render(request, "auctions/newlisting.html", {
         "form": NewListingForm
     })
+
+def listing_view(request, title):
+
+    listing = Listing.objects.get(title=title)
+
+    
+    return render(request, "auctions/listing.html", {
+        "listing": listing
+    })
+

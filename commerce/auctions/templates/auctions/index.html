@@ -8,10 +8,12 @@
         <div class="container-fluid">
             <div class="row align-items-center border border-dark rounded">
                 <div class="col">
-                    <img src="{{ listing.image }}">
+                    <img src="{{ listing.image.url }}">
                 </div>
                 <div class="col">
-                    <h4>{{ listing }}</h4>
+                    <h4>
+                        <a href="/{{ listing }}">{{ listing }}</a>
+                    </h4>
                     <p>{{ listing.description }}</p>
                     <p>Price: € {{ listing.price }}</p>
                 </br>
