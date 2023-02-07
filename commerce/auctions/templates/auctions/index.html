@@ -4,20 +4,20 @@
     <h2>Active Listings</h2>
 
     
-        {% for listing in listings %}
+        {% for active_listing in active_listings %}
         <div class="container-fluid">
             <div class="row align-items-center border border-dark rounded">
                 <div class="col">
-                    <img src="{{ listing.image.url }}">
+                    <img src="{{ active_listing.image.url }}">
                 </div>
                 <div class="col">
                     <h4>
-                        <a href="/{{ listing }}">{{ listing }}</a>
+                        <a href="/{{ active_listing }}">{{ active_listing }}</a>
                     </h4>
-                    <p>{{ listing.description }}</p>
-                    <p>Price: € {{ listing.price }}</p>
+                    <p>{{ active_listing.description }}</p>
+                    <p>Price: € {{ active_listing.price }}</p>
                 </br>
-                    <p style="color: grey; font-size: small; font-style: italic;">Date added: {{ listing.date_added }} </p>
+                    <p style="color: grey; font-size: small; font-style: italic;">Date added: {{ active_listing.date_added }} </p>
                 </div>
             </div>
         

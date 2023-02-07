@@ -11,4 +11,5 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("newlisting",views.newlisting, name="newlisting"),
     path("<str:title>", views.listing_view, name="listing")
+    
 ]

@@ -2,32 +2,37 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
+from decimal import Decimal
 
-from .models import User, Listing, Bid, Comment
+from .models import User, Listing, Bid, Comment #Watchlist
 
 class NewListingForm(forms.Form):
 
     title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title'}))
     description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
-    price = forms.DecimalField(max_digits=6, decimal_places=2, label="Starting Bid $")
+    price = forms.DecimalField(max_digits=6, decimal_places=2, label="Starting Bid €")
     image = forms.ImageField()
 
+class BidForm(forms.Form):
+    bid = forms.DecimalField(max_digits=6, decimal_places=2, label="Bid €")
 
 @login_required
 def index(request):
 
     
-    #user = request.user
+    user = request.user
     #print(user)
     #user_listings = Listing.objects.filter(owner=user)
 
-    listings = Listing.objects.all()
+    active_listings = Listing.objects.filter(active=True)
+    
     
     return render(request, "auctions/index.html", {
-        "listings": listings   #Listing.objects.all()
+        "active_listings": active_listings,
+        "user": user 
     })
 
 
@@ -113,11 +118,63 @@ def newlisting(request):
     })
 
 def listing_view(request, title):
-
+    
+    
+    user = request.user
     listing = Listing.objects.get(title=title)
 
-    
-    return render(request, "auctions/listing.html", {
-        "listing": listing
-    })
+    if request.method == "POST":
+        
+        # Handles adding/removing listing from Watchlist
+        if request.POST["formtype"] == "add": 
+            user.watchlist.add(listing)
+            return redirect("auctions:listing", title)
+        elif request.POST["formtype"] == "remove":
+            user.watchlist.remove(listing)
+            return redirect("auctions:listing", title)
 
+        # Handles bids    
+        elif request.POST["formtype"] == "bid":
+            bid = Decimal(request.POST["bid"])
+            if listing.price >= bid:
+                return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "user": user,
+                "on_watchlist": on_watchlist,
+                "bid_form": BidForm,
+                "message" : f"Your bid must be higher than €{listing.price}"
+                })
+            else:
+                listing.price = request.POST["bid"]
+                listing.bid_count+=1
+                listing.current_winner = user
+                listing.save()
+            return redirect("auctions:listing", title)
+
+    else:
+        user = request.user
+        # Get all listing data for this title
+        listing = Listing.objects.get(title=title)
+
+        # Get all current users watching this listing
+        #user_watchlist = Watchlist.objects.filter(user=user)
+        users_watching = listing.users_watching.all()
+
+        on_watchlist = False
+
+        # Check if this listing is on user_watchlist 
+        for user_watching in users_watching:
+            if user_watching == user:
+                on_watchlist = True
+            
+        
+            
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "user": user,
+            "on_watchlist": on_watchlist,
+            "bid_form": BidForm
+        })
+
+#def bid(request, title):
+    #return

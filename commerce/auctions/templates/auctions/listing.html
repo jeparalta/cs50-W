@@ -10,13 +10,51 @@
 </br>
        
     <p>{{ listing.description }}</p>
-    <p>Price: € {{ listing.price }}</p>
-</br>
+    <p>€ {{ listing.price }}</p>
     <p style="color: grey; font-size: small; font-style: italic;">Date added: {{ listing.date_added }} </p>
+</br>
     
+     
+    
+    {% if on_watchlist == True %}   
+    <form action="{% url 'auctions:listing' listing.title %}" method="post">
+        {% csrf_token %}
+        <input hidden name="formtype" value="remove">
+        <input type="submit" value="Remove from Watchlist">
+    </form>
+    {% else %}
+    <form action="{% url 'auctions:listing' listing.title %}" method="post">
+        {% csrf_token %}
+        <input hidden name="formtype" value="add">
+        <input type="submit"  value="Add to Watchlist">
+    </form>
+    {% endif %}
 
+</br>
 
+    {% if message %}
+    <div style="color:red;">{{ message }}</div>
+    {% endif %}
 
-
+    <form action="{% url 'auctions:listing' listing.title %}" method="post">
+        {% csrf_token %}
+        {{ bid_form }}
+        <input hidden name="formtype" value="bid">
+        <input type="submit" value="Place Bid">
+    </form>
+    {% if listing.current_winner == user %}
+    <p style="color: grey; font-size: small; font-style: italic;">{{ listing.bid_count }} bid(s) so far. Your bid is the current bid. </p> 
+    {% else %}
+    <p style="color: grey; font-size: small; font-style: italic;">{{ listing.bid_count }} bid(s) so far.</p> 
+    {% endif %}
+</br> 
+        TEST
+        <p>on_watchlist:{{ on_watchlist }}</p>
+        <p>users_watching:{{ users_watching }}</p>
+        <p>user:{{ user }}</p>
+        <p>listing:{{ listing }}</p>
+        
+        
+    
 
 {% endblock %}
