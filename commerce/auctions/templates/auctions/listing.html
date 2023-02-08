@@ -36,23 +36,67 @@
     <div style="color:red;">{{ message }}</div>
     {% endif %}
 
+    {% if listing.active == True %}
     <form action="{% url 'auctions:listing' listing.title %}" method="post">
         {% csrf_token %}
         {{ bid_form }}
         <input hidden name="formtype" value="bid">
         <input type="submit" value="Place Bid">
     </form>
-    {% if listing.current_winner == user %}
-    <p style="color: grey; font-size: small; font-style: italic;">{{ listing.bid_count }} bid(s) so far. Your bid is the current bid. </p> 
     {% else %}
+    <h4>This listing is no longer open for bids.</h4>
+    {% endif %}
+    
+    {% if listing.current_winner == user and listing.active == True %}
+    <p style="color: grey; font-size: small; font-style: italic;">{{ listing.bid_count }} bid(s) so far. Your bid is the current bid. </p> 
+    {% elif listing.active == True %}
     <p style="color: grey; font-size: small; font-style: italic;">{{ listing.bid_count }} bid(s) so far.</p> 
+    {% elif listing.current_winner == user and listing.active == False %}
+    <h4>You won this auction!!!</h4>
+    <p style="color: grey; font-size: small; font-style: italic;">This listing had {{ listing.bid_count }} bid(s) and is now closed.</p>
+    {% elif listing.active == False %}
+    <p style="color: grey; font-size: small; font-style: italic;">This listing had {{ listing.bid_count }} bid(s) and is now closed.</p>
+    {% endif %}
+</br>
+    
+    <div>
+        <h4>Comment on this listing</h4>
+        <form action="{% url 'auctions:listing' listing.title %}" method="post">
+            {% csrf_token %}
+            <table>
+            {{ comment_form.as_table }}
+            </table>
+            <input hidden name="formtype" value="comment">
+            <input type="submit" value="Submit Comment">
+            
+        </form>
+        <h4>Comments</h4>
+        {% if not comments %}
+        <h6>No comments yet.</h6>
+        {% endif %}
+
+        {% for comment in comments %}
+        
+        <div style="border-style: solid; border-color: black;">
+        <h5>{{ comment.title }}</h5>
+        <p>{{ comment.body }}</p>
+        <p style="color: grey; font-size: small; font-style: italic;">Submitted by: {{ comment.commenter }}</p>
+        </div>
+    </br>
+
+        
+        {% endfor %}
+    </div>
+</br>
+    {% if listing.owner == user and listing.active == True %}
+    <form action="{% url 'auctions:listing' listing.title %}" method="post">
+        {% csrf_token %}
+        <input hidden name="formtype" value="close">
+        <input type="submit" value="Close Listing">
+    </form>
     {% endif %}
 </br> 
-        TEST
-        <p>on_watchlist:{{ on_watchlist }}</p>
-        <p>users_watching:{{ users_watching }}</p>
-        <p>user:{{ user }}</p>
-        <p>listing:{{ listing }}</p>
+        
         
         
     

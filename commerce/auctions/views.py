@@ -19,6 +19,10 @@ class NewListingForm(forms.Form):
 class BidForm(forms.Form):
     bid = forms.DecimalField(max_digits=6, decimal_places=2, label="Bid €")
 
+class CommentForm(forms.Form):
+    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title'}))
+    body = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
+
 @login_required
 def index(request):
 
@@ -87,6 +91,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+@login_required
 def newlisting(request):
     if request.method == "POST":
         #newtitle = request.post("title")
@@ -117,6 +122,7 @@ def newlisting(request):
         "form": NewListingForm
     })
 
+@login_required
 def listing_view(request, title):
     
     
@@ -149,12 +155,28 @@ def listing_view(request, title):
                 listing.bid_count+=1
                 listing.current_winner = user
                 listing.save()
+                return redirect("auctions:listing", title)
+        # Handles closing the listing if the user is the owner
+        elif request.POST["formtype"] == "close":
+                listing.active = False
+                listing.save()
+                return redirect("auctions:listing", title)
+
+        # Handles Comments
+        elif request.POST["formtype"] == "comment":
+            comment_title = request.POST["title"]
+            comment_body = request.POST["body"]
+
+            new_comment = Comment(commenter=user, listing=listing, title=comment_title, body=comment_body)
+            new_comment.save()
             return redirect("auctions:listing", title)
+
 
     else:
         user = request.user
         # Get all listing data for this title
         listing = Listing.objects.get(title=title)
+        comments = listing.listing_comments.all()
 
         # Get all current users watching this listing
         #user_watchlist = Watchlist.objects.filter(user=user)
@@ -172,9 +194,19 @@ def listing_view(request, title):
         return render(request, "auctions/listing.html", {
             "listing": listing,
             "user": user,
+            "comments": comments,
             "on_watchlist": on_watchlist,
-            "bid_form": BidForm
+            "bid_form": BidForm,
+            "comment_form": CommentForm
         })
 
-#def bid(request, title):
-    #return
+@login_required
+def watchlist(request):
+    user = request.user
+    user_watchlist = user.watchlist.all()
+    
+    return render(request, "auctions/watchlist.html", {
+        "user": user,
+        "user_watchlist": user_watchlist
+    })
+

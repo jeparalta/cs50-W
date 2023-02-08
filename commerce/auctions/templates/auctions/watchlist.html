@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{ user }}'s Watchlist</h2>
+</br>
+
+    
+        {% for listing in user_watchlist %}
+        <div class="container-fluid">
+            <div class="row align-items-center border border-dark rounded">
+                <div class="col">
+                    <img src="{{ listing.image.url }}">
+                </div>
+                <div class="col">
+                    <h4>
+                        <a href="/{{ listing }}">{{ listing }}</a>
+                    </h4>
+                    <p>{{ active_listing.description }}</p>
+                    <p>Price: € {{ listing.price }}</p>
+                </br>
+                    <p style="color: grey; font-size: small; font-style: italic;">Date added: {{ listing.date_added }} </p>
+                </div>
+            </div>
+        
+        </div>
+    </br>
+        {% endfor %}
+
+
+    
+{% endblock %}
