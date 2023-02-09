@@ -12,6 +12,12 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.username}"
 
+class Category(models.Model):
+    name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"{self.name}"
+
 class Listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(max_length=200)
@@ -20,6 +26,7 @@ class Listing(models.Model):
     date_added = models.DateTimeField(default=datetime.today)
     owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="listings")
     active = models.BooleanField(default=True)
+    category = models.ForeignKey(Category, null=True, on_delete=models.PROTECT, related_name="listings")
     bid_count = models.IntegerField(null=True, default=0)
     current_winner = models.ForeignKey(User, null=True, on_delete=models.PROTECT, related_name="winning_bids")
     
@@ -31,7 +38,7 @@ class Bid(models.Model):
     bidder = models.ForeignKey(User,on_delete=models.PROTECT, related_name="user_bids")
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listing_bids")
     amount = models.DecimalField(default=0, max_digits=6, decimal_places=2)
-    
+    date_added = models.DateTimeField(default=datetime.today)
     active = models.BooleanField(default=True)
 
     def __str__(self):

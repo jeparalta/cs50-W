@@ -7,7 +7,8 @@ from django.urls import reverse
 from django import forms
 from decimal import Decimal
 
-from .models import User, Listing, Bid, Comment #Watchlist
+
+from .models import User, Listing, Bid, Comment, Category #Watchlist
 
 class NewListingForm(forms.Form):
 
@@ -155,6 +156,9 @@ def listing_view(request, title):
                 listing.bid_count+=1
                 listing.current_winner = user
                 listing.save()
+                # Record bid 
+                new_bid = Bid(bidder=user, listing=listing, amount=bid)
+                new_bid.save()
                 return redirect("auctions:listing", title)
         # Handles closing the listing if the user is the owner
         elif request.POST["formtype"] == "close":
@@ -173,9 +177,9 @@ def listing_view(request, title):
 
 
     else:
-        user = request.user
+        user = request.user                                             # !!!This variable is already defined above!
         # Get all listing data for this title
-        listing = Listing.objects.get(title=title)
+        listing = Listing.objects.get(title=title)                      # !!!This variable is already defined above!
         comments = listing.listing_comments.all()
 
         # Get all current users watching this listing
@@ -208,5 +212,26 @@ def watchlist(request):
     return render(request, "auctions/watchlist.html", {
         "user": user,
         "user_watchlist": user_watchlist
+    })
+
+@login_required
+def categories(request):
+    categories = Category.objects.all()
+
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+@login_required
+def category_view(request, name):
+    
+    user = request.user
+    category = Category.objects.get(name=name)
+
+    active_listings = Listing.objects.filter(category=category, active=True)
+
+    return render(request, "auctions/category.html", {
+        "category": category,
+        "active_listings": active_listings
     })
 
