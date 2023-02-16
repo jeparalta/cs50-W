@@ -10,12 +10,33 @@ from decimal import Decimal
 
 from .models import User, Listing, Bid, Comment, Category #Watchlist
 
-class NewListingForm(forms.Form):
 
-    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
-    price = forms.DecimalField(max_digits=6, decimal_places=2, label="Starting Bid €")
-    image = forms.ImageField()
+
+class NewListingForm(forms.Form):
+    title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title', 'class': 'form-control'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
+    price = forms.DecimalField(max_digits=6, decimal_places=2, label="Starting Bid €", widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}))
+
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        to_field_name='name',
+        required=True,  
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+"""class NewListingForm(forms.ModelForm)
+    class meta:
+        model = Listing
+        fields = ('title', 'description', 'price', 'image', 'category')
+
+        widget = {
+            'title':form.TextInput(attrs={'class': 'form-control'}),
+            'description':form.TextInput(attrs={'class': 'form-control'}),
+            'title':form.TextInput(attrs={'class': 'form-control'}),
+            'title':form.TextInput(attrs={'class': 'form-control'}),
+            'title':form.TextInput(attrs={'class': 'form-control'}),
+
+        }"""
 
 class BidForm(forms.Form):
     bid = forms.DecimalField(max_digits=6, decimal_places=2, label="Bid €")
@@ -106,29 +127,37 @@ def newlisting(request):
                             title=request.POST["title"], 
                             description = request.POST["description"],
                             price = request.POST["price"],
+                            category = Category.objects.get(name=request.POST['category']),
                             image = request.FILES['image']
-            )
-                            
+            )               
             listing.save()
 
+        return HttpResponseRedirect(reverse("auctions:index"))
 
+    else:
+        categories = Category.objects.all()
 
-
-
-            return HttpResponseRedirect(reverse("auctions:index"))
-
-
-
-    return render(request, "auctions/newlisting.html", {
-        "form": NewListingForm
-    })
+        return render(request, "auctions/newlisting.html", {
+            "form": NewListingForm,
+            "categories":categories
+        })
 
 @login_required
 def listing_view(request, title):
     
-    
     user = request.user
     listing = Listing.objects.get(title=title)
+    comments = listing.listing_comments.all()
+
+    # Get all current users watching this listing
+    users_watching = listing.users_watching.all()
+
+    on_watchlist = False
+
+    # Check if this listing is on user_watchlist 
+    for user_watching in users_watching:
+        if user_watching == user:
+            on_watchlist = True
 
     if request.method == "POST":
         
@@ -177,13 +206,12 @@ def listing_view(request, title):
 
 
     else:
-        user = request.user                                             # !!!This variable is already defined above!
+        #user = request.user                                             # !!!This variable is already defined above!
         # Get all listing data for this title
-        listing = Listing.objects.get(title=title)                      # !!!This variable is already defined above!
-        comments = listing.listing_comments.all()
+        #listing = Listing.objects.get(title=title)                      # !!!This variable is already defined above!
+        
 
         # Get all current users watching this listing
-        #user_watchlist = Watchlist.objects.filter(user=user)
         users_watching = listing.users_watching.all()
 
         on_watchlist = False

@@ -1,14 +1,16 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2 class="test">Active Listings</h2>
 
-    
+        
         {% for active_listing in active_listings %}
         <div class="container-fluid">
-            <div class="row align-items-center border border-dark rounded">
+            <div class="row align-items-center border border-secondary rounded listing">
                 <div class="col">
-                    <img src="{{ active_listing.image.url }}">
+                    <a href="/{{ active_listing }}">
+                        <img src="{{ active_listing.image.url }}">
+                    </a>
                 </div>
                 <div class="col">
                     <h4>
