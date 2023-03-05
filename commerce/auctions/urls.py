@@ -14,6 +14,5 @@ urlpatterns = [
     path("categories", views.categories, name="categories"),
     path("category/<str:name>", views.category_view, name="category"),
     path("<str:title>", views.listing_view, name="listing")
-    
-    
+      
 ]

@@ -3,13 +3,13 @@
 {% block body %}
     <h2>{{ category }}</h2>
 </br>
-
-    
         {% for listing in active_listings %}
         <div class="container-fluid">
-            <div class="row align-items-center border border-dark rounded">
+            <div class="row align-items-center border border-dark rounded listing">
                 <div class="col">
-                    <img src="{{ listing.image.url }}">
+                    <a href="/{{ listing }}">
+                        <img src="{{ listing.image.url }}">
+                    </a>
                 </div>
                 <div class="col">
                     <h4>

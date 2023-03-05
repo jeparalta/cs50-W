@@ -8,35 +8,16 @@ from django import forms
 from decimal import Decimal
 
 
-from .models import User, Listing, Bid, Comment, Category #Watchlist
+from .models import User, Listing, Bid, Comment, Category 
 
 
-
+"""FORMS"""
 class NewListingForm(forms.Form):
     title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title', 'class': 'form-control'}))
     description = forms.CharField(widget=forms.Textarea(attrs={"rows":"5", 'class': 'form-control'}))
     price = forms.DecimalField(max_digits=6, decimal_places=2, label="Starting Bid €", widget=forms.NumberInput(attrs={'class': 'form-control'}))
     image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control'}))
-
-    category = forms.ModelChoiceField(
-        queryset=Category.objects.all(),
-        to_field_name='name',
-        required=True,  
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-"""class NewListingForm(forms.ModelForm)
-    class meta:
-        model = Listing
-        fields = ('title', 'description', 'price', 'image', 'category')
-
-        widget = {
-            'title':form.TextInput(attrs={'class': 'form-control'}),
-            'description':form.TextInput(attrs={'class': 'form-control'}),
-            'title':form.TextInput(attrs={'class': 'form-control'}),
-            'title':form.TextInput(attrs={'class': 'form-control'}),
-            'title':form.TextInput(attrs={'class': 'form-control'}),
-
-        }"""
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), to_field_name='name', required=True, widget=forms.Select(attrs={'class': 'form-control'}))
 
 class BidForm(forms.Form):
     bid = forms.DecimalField(max_digits=6, decimal_places=2, label="Bid €")
@@ -45,16 +26,13 @@ class CommentForm(forms.Form):
     title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Title'}))
     body = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
 
+
 @login_required
 def index(request):
 
-    
+    # Get current user and all existing active listings from db
     user = request.user
-    #print(user)
-    #user_listings = Listing.objects.filter(owner=user)
-
     active_listings = Listing.objects.filter(active=True)
-    
     
     return render(request, "auctions/index.html", {
         "active_listings": active_listings,
@@ -89,6 +67,7 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
+        # Get credentials entered by user
         username = request.POST["username"]
         email = request.POST["email"]
 
@@ -100,7 +79,7 @@ def register(request):
                 "message": "Passwords must match."
             })
 
-        # Attempt to create new user
+        # Attempt to create new user or return error if username already exists
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
@@ -115,11 +94,9 @@ def register(request):
 
 @login_required
 def newlisting(request):
+
     if request.method == "POST":
-        #newtitle = request.post("title")
-        #description = request.post("description")
-        #price = request.post("price")
-        #image = request.post("image")
+        # request info from form
         form = NewListingForm(request.POST, request.FILES)
         if form.is_valid:
             
@@ -135,6 +112,7 @@ def newlisting(request):
         return HttpResponseRedirect(reverse("auctions:index"))
 
     else:
+        # Get all categories to display on New Listing Form options
         categories = Category.objects.all()
 
         return render(request, "auctions/newlisting.html", {
@@ -206,11 +184,7 @@ def listing_view(request, title):
 
 
     else:
-        #user = request.user                                             # !!!This variable is already defined above!
-        # Get all listing data for this title
-        #listing = Listing.objects.get(title=title)                      # !!!This variable is already defined above!
         
-
         # Get all current users watching this listing
         users_watching = listing.users_watching.all()
 
@@ -220,8 +194,6 @@ def listing_view(request, title):
         for user_watching in users_watching:
             if user_watching == user:
                 on_watchlist = True
-            
-        
             
         return render(request, "auctions/listing.html", {
             "listing": listing,
@@ -234,6 +206,7 @@ def listing_view(request, title):
 
 @login_required
 def watchlist(request):
+    # Define user and identify which listings are on users watchlist
     user = request.user
     user_watchlist = user.watchlist.all()
     
@@ -244,6 +217,7 @@ def watchlist(request):
 
 @login_required
 def categories(request):
+
     categories = Category.objects.all()
 
     return render(request, "auctions/categories.html", {
@@ -253,9 +227,9 @@ def categories(request):
 @login_required
 def category_view(request, name):
     
-    user = request.user
+    # Get selected category
     category = Category.objects.get(name=name)
-
+    # Get all active listings with selected category
     active_listings = Listing.objects.filter(category=category, active=True)
 
     return render(request, "auctions/category.html", {

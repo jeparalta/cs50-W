@@ -6,16 +6,13 @@
         <div class="col">
             <img src="{{ listing.image.url }}">
         </div>
-        <div class="col">
-        
+        <div class="col">       
             </br>
                 <h2>{{ listing.title }}</h2>
                 <p>{{ listing.description }}</p>
                 <p>€ {{ listing.price }}</p>
                 <p class="small-italic">Date added: {{ listing.date_added }} </p>
-
             </br>
-
                 {% if message %}
                 <div style="color:red;">{{ message }}</div>
                 {% endif %}
@@ -25,7 +22,7 @@
                     {% csrf_token %}
                     {{ bid_form }}
                     <input hidden name="formtype" value="bid">
-                    <input type="submit" value="Place Bid">
+                    <button type="submit" class="btn btn-warning">Place Bid</button>
                 </form>
                 {% else %}
                 <h4>This listing is no longer open for bids.</h4>
@@ -47,13 +44,13 @@
                 <form action="{% url 'auctions:listing' listing.title %}" method="post">
                     {% csrf_token %}
                     <input hidden name="formtype" value="remove">
-                    <input type="submit" value="Remove from Watchlist">
+                    <button type="submit" class="btn btn-light">Remove from Watchlist</button>
                 </form>
                 {% else %}
                 <form action="{% url 'auctions:listing' listing.title %}" method="post">
                     {% csrf_token %}
                     <input hidden name="formtype" value="add">
-                    <input type="submit"  value="Add to Watchlist">
+                    <button type="submit"  class="btn btn-light">Add to Watchlist</button>
                 </form>
                 {% endif %}
             </div>
@@ -66,9 +63,7 @@
                 {{ comment_form.as_table }}
                 </table>
                 <input hidden name="formtype" value="comment">
-                <input type="submit" value="Submit Comment">
-        
-                
+                <button type="submit" class="btn btn-light">Submit Comment</button>                  
             </form>
         </br>
             <h4>Comments</h4>
@@ -76,16 +71,13 @@
             <h6>No comments yet.</h6>
             {% endif %}
 
-            {% for comment in comments %}
-            
+            {% for comment in comments %}       
             <div class="comment-box">
-            <h5>{{ comment.title }}</h5>
-            <p>{{ comment.body }}</p>
-            <p class="small-italic">Submitted by: {{ comment.commenter }}</p>
+                <h5>{{ comment.title }}</h5>
+                <p>{{ comment.body }}</p>
+                <p class="small-italic">Submitted by: {{ comment.commenter }}</p>
             </div>
-        </br>
-
-            
+        </br>           
             {% endfor %}
         </div>
     </br>
@@ -94,7 +86,7 @@
         <form action="{% url 'auctions:listing' listing.title %}" method="post">
             {% csrf_token %}
             <input hidden name="formtype" value="close">
-            <input type="submit" value="Close Listing">
+            <button type="submit" class="btn btn-secondary">Close Listing</button>
         </form>
         {% endif %}
     </br> 

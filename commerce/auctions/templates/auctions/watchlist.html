@@ -3,8 +3,6 @@
 {% block body %}
     <h2>{{ user }}'s Watchlist</h2>
 </br>
-
-    
         {% for listing in user_watchlist %}
         <div class="container-fluid">
             <div class="row align-items-center border border-dark rounded listing">
@@ -23,11 +21,8 @@
                     <p style="color: grey; font-size: small; font-style: italic;">Date added: {{ listing.date_added }} </p>
                 </div>
             </div>
-        
         </div>
     </br>
         {% endfor %}
-
-
     
 {% endblock %}

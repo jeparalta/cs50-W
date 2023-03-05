@@ -1,0 +1,29 @@
+textarea {
+    min-height: 400px;
+}
+
+.email-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-style: solid;
+    border-color: black;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+  
+.email-details {
+    display: flex;
+    align-items: center;
+}
+  
+.email-sender {
+    font-weight: bold;
+    margin-right: 8px;
+}
+  
+.email-timestamp {
+    font-size: 12px;
+    color: #999;
+}
