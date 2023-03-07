@@ -16,6 +16,17 @@ document.addEventListener('DOMContentLoaded', function() {
   return false;
   };
 
+  // Open email when clicked on
+  document.querySelectorAll('.email-item').forEach(function(div) {
+    div.onclick = function() {
+      email_view(div.dataset.id);
+    }
+  });
+
+    
+
+  
+
 
   
 
@@ -29,6 +40,8 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#email-view').style.display = 'none';
+
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -36,11 +49,15 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
+
+
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'none';
+
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -49,40 +66,62 @@ function load_mailbox(mailbox) {
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
-    // Print emails
-    console.log(emails);
-    //const sender = emails[0].sender;
-    //console.log(sender);
-    
-   /* for (let i = 0; i < emails.length; i++) {
-      console.log(emails[i].sender);
-      let div = document.createElement('div');
-      div.className = 'email-item'
-      div.innerHTML = emails[i].sender + emails[i].subject + emails[i].timestamp;
-      document.querySelector('#emails-view').append(div);
-    }*/
-    const emailsView = document.querySelector('#emails-view');
+    // Print emails for testing
+    //console.log(emails);
+  
     emails.forEach(email => {
-    console.log(email.sender);
-    let div = document.createElement('div');
-    div.className = 'email-item';
-    div.innerHTML = 
-    `<div class="email-details">
-        <span class="email-sender">${email.sender}</span>
-        <span class="email-subject">${email.subject}</span>
-    </div>
-    <div class="email-timestamp">${email.timestamp}</div>`;
-    emailsView.append(div);
-}); 
+        // Create new div and add classname
+        let div = document.createElement('div');
+        div.className = 'email-item';
+        div.dataset.id = `${email.id}`
+        
+        // Add email details to div
+        div.innerHTML = 
+        `<div class="email-details">
+          <span class="email-sender">${email.sender}</span>
+          <span class="email-subject">${email.subject}</span>
+        </div>
+        <div class="email-timestamp">${email.timestamp}</div>`;
 
+        // Append to Email view section
+        document.querySelector('#emails-view').append(div);
+
+        // If email has been read make grey
+        if (email.read === true) {
+          document.querySelector('.email-item').style.backgroundColor = "lightgrey";
+        };
+    }); 
+
+  });
+
+}
+
+// TODO 
+
+// Show email
+function email_view(email_id) {
+  
+  // Show the mailbox and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#email-view').style.display = 'block';
+
+
+  fetch(`/emails/${email_id}`)
+  .then(response => response.json())
+  .then(email => {
+      // Print email
+      console.log(email);
+
+      document.querySelector('#email-view').innerHTML = ` <div> Sender: ${email.sender} </div>
+                                                        <div> Recipients: ${email.recipients} </div>
+                                                        <div> Body: ${email.body} </div>`
   });
 
   
 
+
 }
-
-
-// TODO 
 
 // Send email
 function send_email() {
