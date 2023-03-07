@@ -13,6 +13,10 @@ textarea {
     
 }
 
+.email-item:hover {
+    cursor: pointer;
+}
+
   
 .email-details {
     display: flex;
@@ -24,7 +28,21 @@ textarea {
     margin-right: 12px;
 }
   
+
+.email-header {
+    display: flex;
+    justify-content: space-between;
+   
+}
+
+.email-recipient {
+    margin-bottom: 10px;
+}
+
 .email-timestamp {
-    
-    color: #999;
+    text-align: right;
+}
+
+.email-body {
+    margin-bottom: 20px;
 }

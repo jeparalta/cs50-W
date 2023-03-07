@@ -16,20 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
   return false;
   };
 
-  // Open email when clicked on
-  document.querySelectorAll('.email-item').forEach(function(div) {
-    div.onclick = function() {
-      email_view(div.dataset.id);
-    }
-  });
-
-    
-
-  
-
-
-  
-
 
 });
 
@@ -70,14 +56,15 @@ function load_mailbox(mailbox) {
     //console.log(emails);
   
     emails.forEach(email => {
-        // Create new div and add classname
+
+        // Create new div, add classname and id
         let div = document.createElement('div');
         div.className = 'email-item';
         div.dataset.id = `${email.id}`
         
         // Add email details to div
-        div.innerHTML = 
-        `<div class="email-details">
+        div.innerHTML = `
+        <div class="email-details">
           <span class="email-sender">${email.sender}</span>
           <span class="email-subject">${email.subject}</span>
         </div>
@@ -88,35 +75,98 @@ function load_mailbox(mailbox) {
 
         // If email has been read make grey
         if (email.read === true) {
-          document.querySelector('.email-item').style.backgroundColor = "lightgrey";
+          div.style.backgroundColor = "lightgrey"; 
         };
+
+        // Add click event listener for email item
+        div.addEventListener('click', () => {
+          email_view(email.id);
+        });
     }); 
 
   });
 
 }
 
-// TODO 
 
-// Show email
+
 function email_view(email_id) {
   
-  // Show the mailbox and hide other views
+  // Show the email and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#email-view').style.display = 'block';
 
-
+  // Load email content in html
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(email => {
       // Print email
       console.log(email);
 
-      document.querySelector('#email-view').innerHTML = ` <div> Sender: ${email.sender} </div>
-                                                        <div> Recipients: ${email.recipients} </div>
-                                                        <div> Body: ${email.body} </div>`
+      
+
+
+
+      document.querySelector('#email-view').innerHTML = ` 
+      <div class="email-header">
+    <div><b>From:</b> ${email.sender}</div>
+    <div class="email-timestamp">${email.timestamp}</div>
+    </div>
+    <div class="email-recipient"><b>To:</b> ${email.recipients}</div>
+    <div><b>Subject:</b> ${email.subject}</div>
+    <div class="email-body">${email.body}</div>`
+
+    // Archive/Unarchive email
+    const user = document.querySelector('h2').innerHTML
+    if (email.sender !== user) {
+      if (email.archived === false) {
+        console.log('Archived')
+        let archiveButton = document.createElement('button');
+        archiveButton.innerHTML = 'Archive';
+        archiveButton.className= "btn btn-sm btn-outline-secondary"
+        document.querySelector('#email-view').append(archiveButton);
+
+        archiveButton.addEventListener('click', () => {
+          fetch(`/emails/${email_id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                archived: true
+            })
+          })
+          load_mailbox('inbox');
+        });
+        
+
+      }
+      else {
+        console.log('Not Archived')
+        let unarchiveButton = document.createElement('button');
+        unarchiveButton.innerHTML = 'Unarchive'
+        unarchiveButton.className= "btn btn-sm btn-outline-secondary"
+        document.querySelector('#email-view').append(unarchiveButton);
+
+        unarchiveButton.addEventListener('click', () => {
+          fetch(`/emails/${email_id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                archived: false
+            })
+          })
+          load_mailbox('inbox');
+        });
+        
+      }
+    }
   });
+
+  // Mark email as read
+  fetch(`/emails/${email_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
 
   
 
@@ -125,7 +175,6 @@ function email_view(email_id) {
 
 // Send email
 function send_email() {
-  console.log('Test code')
   
   const recipients = document.querySelector('#compose-recipients').value;
   const subject = document.querySelector('#compose-subject').value;
