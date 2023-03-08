@@ -137,6 +137,7 @@ function email_view(email_id) {
      const replyButton = document.createElement('button');
      replyButton.innerHTML = 'Reply';
      replyButton.className = 'btn btn-sm btn-outline-secondary';
+     replyButton.id = 'reply-button';
      document.querySelector('#email-view').append(replyButton);
      //Reply to email
      replyButton.addEventListener('click', () => {
@@ -215,4 +216,3 @@ function send_email() {
       console.log(result);
   });
 }
-

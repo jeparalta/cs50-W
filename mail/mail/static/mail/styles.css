@@ -8,8 +8,9 @@ textarea {
     justify-content: space-between;
     border-style: solid;
     border-color: black;
+    border-width: thin;
     padding: 5px;
-    margin-top: 5px;
+    margin-top: 3px;
     
 }
 
@@ -45,4 +46,8 @@ textarea {
 
 .email-body {
     margin-bottom: 20px;
+}
+
+#reply-button {
+    margin-right: 5px;
 }
