@@ -1,0 +1,19 @@
+
+
+h2 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#submit {
+    margin-top: 5px;
+}
+
+.post-section {
+    border-style: solid;
+    border-width: thin;
+    border-color: grey;
+    border-radius: 5px;
+    padding: 25px 15px 25px 15px;
+    background-color: #c7f1bd;
+}

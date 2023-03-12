@@ -1,0 +1,21 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<div class="container-fluid">
+    <h2>All Posts</h2>
+    
+    <div class="post-section">
+        <h4>New Post</h4>
+
+        <form action="{% url 'network:index' %}" method="post">
+            <div class="form-group">
+                {% csrf_token %}
+                {{ NewPostform }}
+                <button type="submit" id="submit" class="btn btn-success">Post</button>
+            </div>
+        </form> 
+
+    </div>
+
+</div>
+{% endblock %}
