@@ -5,15 +5,36 @@ h2 {
     margin-bottom: 15px;
 }
 
+
 #submit {
     margin-top: 5px;
 }
 
-.post-section {
+.newpost-section {
     border-style: solid;
     border-width: thin;
     border-color: grey;
     border-radius: 5px;
     padding: 25px 15px 25px 15px;
     background-color: #c7f1bd;
+}
+
+.post-section {
+    margin-top: 20px;
+    border-style: solid;
+    border-width: thin;
+    border-color: grey;
+    border-radius: 5px;
+    padding: 25px 15px 0px 15px;
+    background-color: #c7f1bd;
+}
+
+.post-section .heart-col {
+    padding-right: 10px;
+}
+
+.timestamp {
+    font-size: small;
+    color: grey;
+
 }

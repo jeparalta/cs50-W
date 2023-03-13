@@ -21,10 +21,16 @@ def index(request):
         if form.is_valid:
             newpost = Post(poster = request.user, body = request.POST["body"])
             newpost.save()
+        return HttpResponseRedirect(reverse("network:index"))
 
-    return render(request, "network/index.html", {
-        "NewPostform": NewPostform
-    })
+    else:
+        posts = Post.objects.all().order_by('-timestamp')
+               
+
+        return render(request, "network/index.html", {
+            "NewPostform": NewPostform,
+            "posts": posts
+        })
 
 
 def login_view(request):

@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <h2>All Posts</h2>
     
-    <div class="post-section">
+    <div class="newpost-section">
         <h4>New Post</h4>
 
         <form action="{% url 'network:index' %}" method="post">
@@ -16,6 +16,20 @@
         </form> 
 
     </div>
+    {% for post in posts %}
+    <div class="post-section">
+
+        <h5>{{ post.poster }}</h5>
+        <p>{{ post.body }}</p>
+        <div class="row align-items-center">
+            <div class="col heart-col">
+                <i class="glyphicon glyphicon-heart"></i> 0
+            </div>
+        </div>
+        <p class="timestamp">{{ post.timestamp }}</p>
+        
+    </div>
+    {% endfor %}
 
 </div>
 {% endblock %}

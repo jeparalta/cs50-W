@@ -5,7 +5,7 @@ from datetime import datetime
 
 class User(AbstractUser):
     pass
-    likes = models.ManyToManyField('Post', blank=True, related_name="user_likes")
+    likedposts = models.ManyToManyField('Post', blank=True, related_name="user_likes")
     following = models.ManyToManyField('User', blank=True, related_name="users_followed")
 
     def __str__(self):
