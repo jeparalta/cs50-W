@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
 
@@ -31,6 +31,49 @@ def index(request):
             "NewPostform": NewPostform,
             "posts": posts
         })
+    
+
+
+def profile_view(request, username):
+
+    user = request.user
+    profile = User.objects.get(username=username)
+
+    # Get all users that follow this profile
+    users_following = profile.followers.all()
+
+    followed = False
+
+    # Check if  current user is following profile
+    for user_following in users_following:
+        if user_following == user:
+            followed = True
+
+    print(followed)
+
+
+
+    if request.method == "POST":
+        # Handles adding/removing listing from Watchlist
+        if request.POST["formtype"] == "follow": 
+            profile.followers.add(user)
+            
+            return redirect("network:profile", username)
+        
+        elif request.POST["formtype"] == "unfollow":
+            profile.followers.remove(user)
+            
+            return redirect("network:profile", username)
+        
+        print(followed)
+    
+    else:
+        
+
+        return render(request, "network/profile.html", {
+            "profile": profile,
+            "followed": followed
+        })
 
 
 def login_view(request):
@@ -44,7 +87,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("network:index"))
         else:
             return render(request, "network/login.html", {
                 "message": "Invalid username and/or password."
@@ -55,7 +98,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("network:index"))
 
 
 def register(request):
@@ -80,7 +123,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("network:index"))
     else:
         return render(request, "network/register.html")
     

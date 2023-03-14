@@ -4,9 +4,8 @@ from datetime import datetime
 
 
 class User(AbstractUser):
-    pass
-    likedposts = models.ManyToManyField('Post', blank=True, related_name="user_likes")
-    following = models.ManyToManyField('User', blank=True, related_name="users_followed")
+    
+    followers = models.ManyToManyField('self', symmetrical=False, blank=True, related_name="following")
 
     def __str__(self):
         return f"{self.username}"
@@ -15,6 +14,7 @@ class User(AbstractUser):
 class Post(models.Model):
     poster = models.ForeignKey(User,on_delete=models.PROTECT, related_name="user_posts")
     body = models.TextField(max_length=300)
+    liked_by = models.ManyToManyField(User, blank=True, related_name='liked_posts')
     timestamp = models.DateTimeField(default=datetime.today)
 
     def __str__(self):

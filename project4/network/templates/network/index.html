@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="container-fluid">
-    <h2>All Posts</h2>
+    <h3>All Posts</h3>
     
     <div class="newpost-section">
         <h4>New Post</h4>
@@ -19,7 +19,7 @@
     {% for post in posts %}
     <div class="post-section">
 
-        <h5>{{ post.poster }}</h5>
+        <h5><a class="profilename" href="/{{ post.poster }}">{{ post.poster }}</a></h5>
         <p>{{ post.body }}</p>
         <div class="row align-items-center">
             <div class="col heart-col">

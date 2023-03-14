@@ -1,0 +1,28 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<div class="container-fluid">
+    <h2>{{ profile.username }}</h2>
+    <h4>Followers {{ profile.followers.count }}</h4>
+    <h4>Following {{ profile.following.count }}</h4>
+
+    {% if user.username != profile.username %}
+        
+        {% if followed == False %}
+        <form action="{% url 'network:profile' profile.username %}" method="post">
+            {% csrf_token %}
+            <input hidden name="formtype" value="follow">
+            <button type="submit" class="btn btn-light">Follow</button>
+        </form>
+        {% else %}
+        <form action="{% url 'network:profile' profile.username %}" method="post">
+            {% csrf_token %}
+            <input hidden name="formtype" value="unfollow">
+            <button type="submit" class="btn btn-light">Unfollow</button>
+        </form>
+        {% endif %}
+
+    {% endif %}
+
+</div>
+{% endblock %}
