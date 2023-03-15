@@ -31,6 +31,32 @@ def index(request):
             "NewPostform": NewPostform,
             "posts": posts
         })
+
+
+
+def following(request):
+
+    if request.method == "POST":
+        form = NewPostform(request.POST)
+        if form.is_valid:
+            newpost = Post(poster = request.user, body = request.POST["body"])
+            newpost.save()
+        return HttpResponseRedirect(reverse("network:index"))
+
+    else:
+        user = request.user
+        followedprofiles = user.following.all()
+        posts = []
+        for followedprofile in followedprofiles:
+            posts_from_profile = Post.objects.filter(poster = followedprofile)
+            for post in posts_from_profile:
+                posts.append(post)
+               
+
+        return render(request, "network/index.html", {
+            "NewPostform": NewPostform,
+            "posts": posts
+        })
     
 
 
@@ -42,38 +68,37 @@ def profile_view(request, username):
     # Get all users that follow this profile
     users_following = profile.followers.all()
 
+    # Initiate followed variable to false
     followed = False
 
-    # Check if  current user is following profile
+    # Check if  current user is following profile and update followed if true
     for user_following in users_following:
         if user_following == user:
             followed = True
 
-    print(followed)
-
-
 
     if request.method == "POST":
-        # Handles adding/removing listing from Watchlist
+
+        # Handles following/unfollowing
         if request.POST["formtype"] == "follow": 
             profile.followers.add(user)
-            
             return redirect("network:profile", username)
         
         elif request.POST["formtype"] == "unfollow":
             profile.followers.remove(user)
-            
             return redirect("network:profile", username)
-        
-        print(followed)
     
     else:
-        
 
+        posts = Post.objects.filter(poster=profile).order_by('-timestamp')
+        
         return render(request, "network/profile.html", {
             "profile": profile,
-            "followed": followed
+            "followed": followed,
+            "posts": posts
         })
+
+
 
 
 def login_view(request):

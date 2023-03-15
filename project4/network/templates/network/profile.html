@@ -12,17 +12,31 @@
         <form action="{% url 'network:profile' profile.username %}" method="post">
             {% csrf_token %}
             <input hidden name="formtype" value="follow">
-            <button type="submit" class="btn btn-light">Follow</button>
+            <button type="submit" class="btn btn-outline-success">Follow</button>
         </form>
         {% else %}
         <form action="{% url 'network:profile' profile.username %}" method="post">
             {% csrf_token %}
             <input hidden name="formtype" value="unfollow">
-            <button type="submit" class="btn btn-light">Unfollow</button>
+            <button type="submit" class="btn btn-outline-secondary">Unfollow</button>
         </form>
         {% endif %}
 
     {% endif %}
+    {% for post in posts %}
+    <div class="post-section">
+
+        <h5><a class="profilename" href="/{{ post.poster }}">{{ post.poster }}</a></h5>
+        <p>{{ post.body }}</p>
+        <div class="row align-items-center">
+            <div class="col heart-col">
+                <i class="glyphicon glyphicon-heart"></i> 0
+            </div>
+        </div>
+        <p class="timestamp">{{ post.timestamp }}</p>
+        
+    </div>
+    {% endfor %}
 
 </div>
 {% endblock %}
