@@ -42,3 +42,12 @@ h2 {
 .profilename {
     color: darkgreen;
 }
+
+.edit {
+    color: darkgreen;
+}
+
+.edit:hover {
+    color: grey;
+    cursor: pointer;
+}

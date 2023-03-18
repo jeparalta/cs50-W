@@ -1,9 +1,11 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
 <div class="container-fluid">
-    <h3>All Posts</h3>
+    <h3>{{ heading }}</h3>
     
+    {% if user.is_authenticated %}
     <div class="newpost-section">
         <h4>New Post</h4>
 
@@ -16,11 +18,14 @@
         </form> 
 
     </div>
-    {% for post in posts %}
+    {% endif %}
+    {% for post in page %}
     <div class="post-section">
 
         <h5><a class="profilename" href="/{{ post.poster }}">{{ post.poster }}</a></h5>
-        <p>{{ post.body }}</p>
+        
+        <p id="post-body-{{ post.id }}">{{ post.body }}</p>
+        <p class="edit" data-id="{{ post.id }}">edit</p>
         <div class="row align-items-center">
             <div class="col heart-col">
                 <i class="glyphicon glyphicon-heart"></i> 0
@@ -31,5 +36,38 @@
     </div>
     {% endfor %}
 
+    {% if page.has_other_pages %}
+    <nav>
+    <div class="d-flex justify-content-center">
+        <ul class="pagination bg-dark ">
+            {% if page.has_previous %}
+            <li class="page-item"><a class="page-link text-dark" href="?page=1">&laquo; First</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ page.previous_page_number }}">&lsaquo; Prev</a></li>
+            {% endif %}
+
+            {% for i in page.paginator.page_range %}
+            {% if page.number == i %}
+            <li class="page-item active"><span class="page-link bg-success border-success">{{ i }}<span class="sr-only">(current)</span></span></li>
+            {% else %}
+            {% if i > page.number|add:'-3' and i < page.number|add:'3' %}
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+
+            {% if page.has_next %}
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ page.next_page_number }}">Next &rsaquo;</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ page.paginator.num_pages }}">Last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    </nav>
+    {% endif %}
+
+
 </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/edit.js' %}"></script>
 {% endblock %}

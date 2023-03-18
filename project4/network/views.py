@@ -1,9 +1,14 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.http import JsonResponse
 from django import forms
+import json
+
 
 from .models import User, Post, Comment
 
@@ -25,15 +30,25 @@ def index(request):
 
     else:
         posts = Post.objects.all().order_by('-timestamp')
+
+        #Paginator
+        page_number = request.GET.get('page', 1)
+        paginator = Paginator(posts, 3)
+        page = paginator.get_page(page_number)
+
+
+
+        
                
 
         return render(request, "network/index.html", {
             "NewPostform": NewPostform,
-            "posts": posts
+            "page": page,
+            "heading": "All Posts"
         })
 
 
-
+@login_required
 def following(request):
 
     if request.method == "POST":
@@ -47,15 +62,22 @@ def following(request):
         user = request.user
         followedprofiles = user.following.all()
         posts = []
+        
         for followedprofile in followedprofiles:
             posts_from_profile = Post.objects.filter(poster = followedprofile)
             for post in posts_from_profile:
                 posts.append(post)
+
+         #Paginator
+        page_number = request.GET.get('page', 1)
+        paginator = Paginator(posts, 2)
+        page = paginator.get_page(page_number)
                
 
         return render(request, "network/index.html", {
             "NewPostform": NewPostform,
-            "posts": posts
+            "page": page,
+            "heading": "Following"
         })
     
 
@@ -91,11 +113,17 @@ def profile_view(request, username):
     else:
 
         posts = Post.objects.filter(poster=profile).order_by('-timestamp')
+
+        print(posts)
+        #Paginator
+        page_number = request.GET.get('page', 1)
+        paginator = Paginator(posts, 3)
+        page = paginator.get_page(page_number)
         
         return render(request, "network/profile.html", {
             "profile": profile,
             "followed": followed,
-            "posts": posts
+            "page": page
         })
 
 
@@ -151,5 +179,25 @@ def register(request):
         return HttpResponseRedirect(reverse("network:index"))
     else:
         return render(request, "network/register.html")
+
+
+def edit_post(request, post_id):
+
+    if request.method == 'PUT':
+        # update the post
+        post = Post.objects.get(id=post_id)
+        body = request.body.decode('utf-8')
+        post_data = json.loads(body)
+        post.body = post_data['body']
+        post.save()
+
+        # return a JSON response
+        response_data = {'success': True}
+        return JsonResponse(response_data)
+
+
+
+        
+
     
 

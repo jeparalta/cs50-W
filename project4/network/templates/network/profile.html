@@ -6,6 +6,7 @@
     <h4>Followers {{ profile.followers.count }}</h4>
     <h4>Following {{ profile.following.count }}</h4>
 
+    {% if user.is_authenticated %}
     {% if user.username != profile.username %}
         
         {% if followed == False %}
@@ -23,7 +24,10 @@
         {% endif %}
 
     {% endif %}
-    {% for post in posts %}
+    {% endif %}
+
+    
+    {% for post in page %}
     <div class="post-section">
 
         <h5><a class="profilename" href="/{{ post.poster }}">{{ post.poster }}</a></h5>
@@ -37,6 +41,34 @@
         
     </div>
     {% endfor %}
+
+    {% if page.has_other_pages %}
+    <nav>
+    <div class="d-flex justify-content-center">
+        <ul class="pagination bg-dark ">
+            {% if page.has_previous %}
+            <li class="page-item"><a class="page-link text-dark" href="?page=1">&laquo; First</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ page.previous_page_number }}">&lsaquo; Prev</a></li>
+            {% endif %}
+
+            {% for i in page.paginator.page_range %}
+            {% if page.number == i %}
+            <li class="page-item active"><span class="page-link bg-success border-success">{{ i }}<span class="sr-only">(current)</span></span></li>
+            {% else %}
+            {% if i > page.number|add:'-3' and i < page.number|add:'3' %}
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+
+            {% if page.has_next %}
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ page.next_page_number }}">Next &rsaquo;</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?page={{ page.paginator.num_pages }}">Last &raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    </nav>
+    {% endif %}
 
 </div>
 {% endblock %}
