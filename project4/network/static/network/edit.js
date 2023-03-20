@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    // EDIT POST //
+
     document.querySelectorAll('.edit').forEach(function(editButton) {
       editButton.onclick = function() {
         // Get post id and retrieve original body of post
@@ -48,5 +51,49 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       };
     });
-  });
+
+
+        // LIKE POST //
+
+    if (isAuthenticated) {
+        document.querySelectorAll('.glyphicon').forEach(function(hearticon) {
+            hearticon.addEventListener('click', function() {
+
+                // Get post id
+                const post_id = this.dataset.like;
+                const liked = this.dataset.liked;
+                
+                let like_count = parseInt(document.querySelector(`#like-count-${post_id}`).innerHTML)
+                
+                //console.log(like_count)
+            
+                // update post like count on server
+                fetch(`/like/${post_id}`, {
+                    method: 'PUT',
+                    headers: {
+                    'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    },
+                    })
+
+                    .then(response => {
+                        // update heart icon
+                        if (liked === "False") {
+                            this.classList.remove("glyphicon-heart-empty");
+                            this.classList.add("glyphicon-heart");
+                            this.dataset.liked = "True";
+                            like_count = like_count + 1;
+                        } else {
+                            this.classList.remove("glyphicon-heart");
+                            this.classList.add("glyphicon-heart-empty");
+                            this.dataset.liked = "False";
+                            like_count = like_count - 1;
+                        }  
+
+                        // update like count
+                        document.querySelector(`#like-count-${post_id}`).innerHTML = like_count;
+                    })  
+            }   )  
+        })
+    }   
+});
   

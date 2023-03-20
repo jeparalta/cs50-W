@@ -1,14 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import JsonResponse
 from django import forms
 import json
-
 
 from .models import User, Post, Comment
 
@@ -18,7 +17,7 @@ class NewPostform(forms.Form):
     body = forms.CharField(label="", widget=forms.Textarea(attrs={"rows":"5", "class": "form-control"}))
     
 
-
+"""VIEWS"""
 def index(request):
 
     if request.method == "POST":
@@ -31,15 +30,10 @@ def index(request):
     else:
         posts = Post.objects.all().order_by('-timestamp')
 
-        #Paginator
+        # Paginator
         page_number = request.GET.get('page', 1)
-        paginator = Paginator(posts, 3)
-        page = paginator.get_page(page_number)
-
-
-
-        
-               
+        paginator = Paginator(posts, 10)
+        page = paginator.get_page(page_number)    
 
         return render(request, "network/index.html", {
             "NewPostform": NewPostform,
@@ -63,14 +57,19 @@ def following(request):
         followedprofiles = user.following.all()
         posts = []
         
+        # Populate list of posts user follows
         for followedprofile in followedprofiles:
             posts_from_profile = Post.objects.filter(poster = followedprofile)
+                
             for post in posts_from_profile:
                 posts.append(post)
 
-         #Paginator
+        # Sort the posts in descending order
+        posts = sorted(posts, key=lambda x: x.timestamp, reverse=True)                      
+
+        # Paginator
         page_number = request.GET.get('page', 1)
-        paginator = Paginator(posts, 2)
+        paginator = Paginator(posts, 10)
         page = paginator.get_page(page_number)
                
 
@@ -98,7 +97,6 @@ def profile_view(request, username):
         if user_following == user:
             followed = True
 
-
     if request.method == "POST":
 
         # Handles following/unfollowing
@@ -114,10 +112,9 @@ def profile_view(request, username):
 
         posts = Post.objects.filter(poster=profile).order_by('-timestamp')
 
-        print(posts)
         #Paginator
         page_number = request.GET.get('page', 1)
-        paginator = Paginator(posts, 3)
+        paginator = Paginator(posts, 10)
         page = paginator.get_page(page_number)
         
         return render(request, "network/profile.html", {
@@ -149,9 +146,11 @@ def login_view(request):
         return render(request, "network/login.html")
 
 
+
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("network:index"))
+
 
 
 def register(request):
@@ -181,19 +180,50 @@ def register(request):
         return render(request, "network/register.html")
 
 
+
 def edit_post(request, post_id):
 
     if request.method == 'PUT':
         # update the post
         post = Post.objects.get(id=post_id)
-        body = request.body.decode('utf-8')
-        post_data = json.loads(body)
-        post.body = post_data['body']
-        post.save()
+        user = request.user
 
-        # return a JSON response
-        response_data = {'success': True}
-        return JsonResponse(response_data)
+        if post.poster == user:
+
+            body = request.body.decode('utf-8')
+            post_data = json.loads(body)
+            post.body = post_data['body']
+            post.save()
+
+            # return a JSON response
+            response_data = {'success': True}
+            return JsonResponse(response_data)
+
+
+
+def like_post(request, post_id):
+    if request.method == "PUT":
+    
+            # Get post
+            post = Post.objects.get(id=post_id)
+            user = request.user
+
+            # Check if the user already liked the post
+            if user in post.liked_by.all():
+                post.liked_by.remove(user)
+            else:
+                post.liked_by.add(user)
+
+            post.save()
+
+            # Return a JSON response
+            response_data = {'success': True}
+            return JsonResponse(response_data)
+
+        
+    
+    
+
 
 
 

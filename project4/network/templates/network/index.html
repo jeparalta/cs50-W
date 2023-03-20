@@ -22,14 +22,24 @@
     {% for post in page %}
     <div class="post-section">
 
-        <h5><a class="profilename" href="/{{ post.poster }}">{{ post.poster }}</a></h5>
+        <h5><a id="post-poster-{{ post.id }}" class="profilename" href="/{{ post.poster }}">{{ post.poster }}</a></h5>
         
         <p id="post-body-{{ post.id }}">{{ post.body }}</p>
+        {% if post.poster == user %}
         <p class="edit" data-id="{{ post.id }}">edit</p>
+        {% endif %}
+
         <div class="row align-items-center">
-            <div class="col heart-col">
-                <i class="glyphicon glyphicon-heart"></i> 0
+
+            <div id="likes-{{ post.id }}" class="col heart-col">
+                {% if user in post.liked_by.all %}
+                <i class="glyphicon glyphicon-heart" data-liked="True" data-like="{{ post.id }}"></i>
+                {% else %} 
+                <i class="glyphicon glyphicon-heart-empty" data-liked="False" data-like="{{ post.id }}"></i>
+                {% endif %}
+                <p id="like-count-{{ post.id }}">{{ post.liked_by.all|length }}</p>
             </div>
+            
         </div>
         <p class="timestamp">{{ post.timestamp }}</p>
         
@@ -64,10 +74,20 @@
     </nav>
     {% endif %}
 
-
 </div>
 {% endblock %}
 
 {% block script %}
     <script src="{% static 'network/edit.js' %}"></script>
+    {% if user.is_authenticated %}
+    <script>
+        var isAuthenticated = true;
+    </script>
+    {% else %}
+    <script>
+        var isAuthenticated = false;
+    </script>
+    {% endif %}
+
 {% endblock %}
+
