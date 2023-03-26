@@ -1,0 +1,175 @@
+/*
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: grid;
+    grid-template-columns: 200px 100px 1fr;
+    grid-template-rows: 50px auto;
+    grid-template-areas:
+      "sidebar date-picker-container header"
+      "sidebar rooms scheduler";
+  }
+  
+  .sidebar {
+    grid-area: sidebar;
+    background-color: #f0f0f0;
+    padding: 1rem;
+    border-right: 1px solid #ccc;
+  }
+  
+  .date-picker-container {
+    grid-area: date-picker-container;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ccc;
+  }
+  
+  .scroll-btn {
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .date-picker {
+    cursor: pointer;
+  }
+  
+  .header {
+    grid-area: header;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dates {
+    
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: bold;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ccc;
+  }
+  
+  .rooms {
+    grid-area: rooms;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 80px);
+    width: 100%;
+  }
+  
+  .room {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  
+  .scheduler {
+    grid-area: scheduler;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(5, 80px);
+    width: 100%;
+    height: calc(5 * 80px);
+    background-image:
+      linear-gradient(0deg, #ccc 1px, transparent 1px),
+      linear-gradient(90deg, #ccc 1px, transparent 1px);
+    background-size:
+      100% calc(100% / 5 - 1px),
+      calc(100% / 7 - 1px) 100%;
+    background-position:
+      0 bottom,
+      left 0;
+  }
+
+*/
+
+/* Agenda View */
+
+.day-section {
+  border-style: solid;
+  border-color: lightblue;
+  border-width: 1px;
+  border-radius: 3px;
+  margin: 5px;
+  padding: 5px;
+  background-color: lightblue;
+}
+
+.clean-section {
+
+  border-style: solid;
+  border-color: lightcoral;
+  border-width: 1px;
+  border-radius: 3px;
+  margin: 10px;
+  padding: 5px;
+  background-color: lightcoral;
+
+}
+
+.clean-section:hover {
+  cursor: pointer;
+}
+
+
+.section-date {
+  margin: 5px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.booking-section {
+
+  border-style: solid;
+  border-color: rgb(133, 133, 133);
+  border-width: 1px;
+  border-radius: 3px;
+  margin: 10px;
+  padding: 5px;
+  background-color: rgb(133, 133, 133);
+
+}
+
+.sidebar-button {
+
+  border-style: solid;
+  border-color: lightblue;
+  border-width: 1px;
+  border-radius: 3px;
+  margin: 5px;
+  padding: 5px;
+  background-color: lightblue;
+
+}
+
+h2 {
+
+  padding: 12px;
+
+}
+  

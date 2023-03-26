@@ -1,0 +1,51 @@
+{% extends "minilogistic/layout.html" %}
+{% load static %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduler UI</title>
+    <link href="{% static 'minilogistic/styles.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  
+  <div class="date-picker-container">
+    <button class="scroll-btn">&#x25C0;</button>
+    <input type="date" class="date-picker" />
+    <button class="scroll-btn">&#x25B6;</button>
+  </div>
+
+  <div class="header">
+    <div class="dates">
+
+      <div class="date">01 Jan</div>
+      <div class="date">02 Jan</div>
+      <div class="date">03 Jan</div>
+      <div class="date">04 Jan</div>
+      <div class="date">05 Jan</div>
+      <div class="date">06 Jan</div>
+      <div class="date">07 Jan</div>
+
+    </div>
+  </div>
+  <div class="rooms">
+    
+    <div class="room first-room">Room 1</div>
+        <div class="room">Room 2</div>
+        <div class="room">Room 3</div>
+        <div class="room">Room 4</div>
+        <div class="room">Room 5</div>
+
+  </div>
+  <div class="scheduler">
+    <!-- Scheduler content... -->
+  </div>
+</div>
+</body>
+</html>
+
+{% endblock %}

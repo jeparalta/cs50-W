@@ -1,0 +1,75 @@
+{% extends "minilogistic/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            {% for day in dates %}
+            
+                <div class="day-section">
+
+                    <h5 class="section-date">{{ day }}</h5>
+
+                    {% for clean in cleans %}
+                        {% if clean.date == day %}
+                        <div class="row clean-section">
+                            <div class="col">
+                                <h4>{{ clean.location }}</h4>
+                            </div>
+                            <div class="col">
+                                <p>Clean time: {{ clean.start_time }}</p>
+                            </div>
+                            <div class="col">
+                                <p>Booking Arrival: {{ clean.booking.arrival_time }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% for booking in bookings %}
+                        {% if booking.arrival_date == day %}
+                        <div class="row booking-section">
+                            <div class="col">
+                                <h4>{{ booking.location }}</h4>
+                            </div>
+                            <div class="col">
+                                <p>Guest arriving: {{ booking.firstname }} {{ booking.lastname }}</p>
+                            </div>
+                            <div class="col">
+                                <p>Arrival time: {{ booking.arrival_time }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="button-container">
+                        <button type="button" class="btn btn-info">Add Clean</button>
+                    </div>
+                    
+                </div>
+            
+            {% endfor %}
+        </div>
+        <div id="sidebar" class="col-md-4">
+            <div id="sidebar-menu" class="row">
+                
+                <div class="col">
+                    <input id="datepicker" width="200" />
+                    <script>
+                        $('#datepicker').datepicker({
+                            uiLibrary: 'bootstrap4'
+                        });
+                    </script>
+                </div>
+                <div class="col">
+                    
+                    <button type="button" class="btn btn-info">New Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>     
+</div>
+
+{% endblock %}
+
