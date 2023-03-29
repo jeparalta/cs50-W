@@ -1,0 +1,55 @@
+<form>
+    <div class="booking-section">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="form-header text-center">New Booking</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <select class="form-control" id="locationSelect">
+                    <option selected disabled="true">Location</option>
+                    {% for location in locations %}
+                        <option value="{{ location.id }}">{{ location.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 form-group">
+                <input type="text" placeholder="First Name" class="form-control" id="firstName">
+            </div>
+            <div class="col-md-4 form-group">
+                <input type="text" placeholder="Last Name" class="form-control" id="lastName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label for="check-in">Check-in</label>
+                <input type="date" class="form-control" id="check-in" name="checkin">
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="check-out">Check-out</label>
+                <input type="date" class="form-control" id="check-out" name="checkout">
+            </div>
+        </div>
+        <div class="row align-items-end">
+            <div class="col-md-4 form-group">
+                <label for="time-input">Arrival Time</label>
+                <input type="time" class="form-control" id="time-input" name="time">
+            </div>
+            <div class="col-md-4 form-group">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="selfCheckin">
+                    <label class="form-check-label" for="selfCheckin">Self Check-in</label>
+                </div>
+            </div>
+            <div class="col-md-4 form-group text-right">
+                <button type="submit" class="btn btn-info">Add Booking</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+

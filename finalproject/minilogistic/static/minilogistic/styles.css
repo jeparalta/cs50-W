@@ -106,6 +106,10 @@ body {
 
 /* Agenda View */
 
+#date-picker {
+  margin: 5px;
+}
+
 .day-section {
   border-style: solid;
   border-color: lightblue;
@@ -114,6 +118,10 @@ body {
   margin: 5px;
   padding: 5px;
   background-color: lightblue;
+}
+
+.day-section-container {
+  transition: opacity 0.5s ease-in-out;
 }
 
 .clean-section {
@@ -137,11 +145,12 @@ body {
   margin: 5px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.form-transition {
+  opacity: 0;
+  max-height: 0;
+  transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
 }
+
 
 .booking-section {
 
@@ -155,6 +164,11 @@ body {
 
 }
 
+.form-header {
+
+  text-align: center;
+}
+
 .sidebar-button {
 
   border-style: solid;
@@ -165,11 +179,4 @@ body {
   padding: 5px;
   background-color: lightblue;
 
-}
-
-h2 {
-
-  padding: 12px;
-
-}
-  
+} 

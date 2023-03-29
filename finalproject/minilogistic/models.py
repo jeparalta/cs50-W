@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.db import models
-from datetime import datetime
+from datetime import datetime, date
 
 
 
@@ -65,3 +65,11 @@ class Clean(models.Model):
 
     def __str__(self):
         return f"Clean: {self.location} on {self.date}"
+    
+
+class Selector(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="selectors")
+    agenda_date = models.DateField(default=date.today)
+
+    def __str__(self):
+        return f"{self.agenda_date}"
