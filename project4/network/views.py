@@ -5,14 +5,13 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.http import JsonResponse, HttpResponse
-from django.template import loader
+from django.http import JsonResponse
 from django import forms
 import json
 
 
 
-from .models import User, Post, Comment
+from .models import User, Post
 
 
 """FORMS"""
@@ -224,9 +223,7 @@ def like_post(request, post_id):
             return JsonResponse(response_data)
     
     
-def booking_form(request):
-    template = loader.get_template('minilogistic/booking_form.html')
-    return HttpResponse(template.render({}, request))
+
 
         
     
