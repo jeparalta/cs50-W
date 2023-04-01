@@ -2,7 +2,8 @@
             
                 <div class="day-section">
 
-                    <h5 class="section-date">{{ day|date:"l, F j, Y" }}</h5>
+                    <h5 class="section-date" data-date="{{ day|date:'Y-m-d' }}">{{ day|date:"l, F j, Y" }}</h5>
+
 
 
 
@@ -15,12 +16,15 @@
                             <div class="col">
                                 <p><b>Clean time:</b> {{ clean.start_time }}</p>
                             </div>
+                            {% if clean.arrival_time %}
                             <div class="col">
-                                <p><b>Booking Arrival:</b> {{ clean.booking.arrival_time }}</p>
+                                <p><b>Same day arrival @</b> {{ clean.arrival_time }}</p>
                             </div>
+                            {% endif%}
                         </div>
                         {% endif %}
                     {% endfor %}
+
                     {% for booking in bookings %}
                         {% if booking.arrival_date == day %}
                         <div class="row booking-section">
@@ -44,16 +48,15 @@
                         
                     <div class="row">
                         <div class="col text-right button-container">
-                            <button type="button" class="clean-button btn btn-info" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
+                            <button type="button" class="clean-button btn btn-info btn-lg" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
                         </div>
                         <div id="add-booking-button" class="col text-left">
-                            <button type="button" class="booking-button btn btn-info" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
+                            <button type="button" class="booking-button btn btn-info btn-lg" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
                         </div>
                     </div>
                     
                 </div>
             
             {% endfor %}
-
 
 

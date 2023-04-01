@@ -1,4 +1,4 @@
-<form>
+<form id="newclean-form" action="{% url 'minilogistic:newclean' %}" method="POST">
     <div class="clean-section">
         <div class="row">
             <div class="col-12">
@@ -6,9 +6,10 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 form-group">
-                <select class="form-control" id="locationSelect">
-                    <option selected disabled="true">Location</option>
+            <div style="padding-top: 31.8px;" class="col-md-4 form-group">
+               
+                <select class="form-control" id="locationSelect" name="location" required>
+                    <option value="" selected disabled="true">Location</option>
                     {% for location in locations %}
                         <option value="{{ location.id }}">{{ location.name }}</option>
                     {% endfor %}
@@ -16,14 +17,24 @@
             </div>
             <div class="col-md-4 form-group">
                 <label for="clean-date">Clean date</label>
-                <input type="date" class="form-control" id="clean-date" name="cleandate">
+                <input type="date" class="form-control" id="clean-date" name="clean_date" required>
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="start_time">Start Time</label>
+                <input type="time" class="form-control" id="start-time" name="start_time" required>
             </div>
             
         </div>
         <div class="row">
+            
+            
             <div class="col-md-4 form-group">
-                <label for="time-input">Arrival Time</label>
-                <input type="time" class="form-control" id="time-input" name="time">
+                <select class="form-control" id="cleaners-assigned" name="cleaners_assigned[]" multiple required>
+                    <option value="" disabled="true">Cleaners</option>
+                    {% for cleaner in cleaners %}
+                        <option value="{{ cleaner.id }}">{{ cleaner.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             
         </div>
@@ -31,10 +42,18 @@
             
             <div class="col-md-4 form-group">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="sameDay">
-                    <label class="form-check-label" for="sameDay">Same Day?</label>
+                    <input type="checkbox" class="form-check-input" id="same-day" name="same_day">
+                    <label class="form-check-label" for="sameDay">Same day arrival?</label>
                 </div>
             </div>
+            <div class="col-md-4 form-group" >
+                <div id="clean-form-arrival-time-container">
+                <label for="time-input">Arrival Time</label>
+                <input type="time" class="form-control" id="arrival-time" name="arrival_time">
+                </div>
+
+            </div>
+            
             <div class="col-md-4 form-group text-right">
                 <button type="submit" class="btn btn-info">Add Clean</button>
             </div>

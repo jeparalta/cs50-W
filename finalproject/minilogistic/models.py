@@ -57,9 +57,9 @@ class Contractor(models.Model):
 class Clean(models.Model):
     location = models.ForeignKey(Location, on_delete=models.PROTECT, related_name="cleans")
     date = models.DateField()
-    start_time = models.TimeField()
+    start_time = models.TimeField() 
     duration = models.DecimalField(default=0.0, max_digits=3, decimal_places=2)
-    booking = models.ForeignKey(Booking, on_delete=models.PROTECT, related_name="cleans")
+    arrival_time = models.TimeField(null=True)
     cleaners = models.ManyToManyField(Cleaner, related_name="cleans")
     date_created = models.DateTimeField(default= datetime.today)
 
