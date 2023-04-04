@@ -1,29 +1,37 @@
 document.addEventListener("DOMContentLoaded", () => {
     const datePicker = document.querySelector("#datepicker");
     const daySectionContainer = document.querySelector(".day-section-container");
+    const horizontalToggle = document.querySelector("#horizontal");
 
     // ----------- DATEPICKER ---------------- //
+    function updateView(toggle) {
+        const date = datePicker.value; // get new date selected on date picker
+    
+        daySectionContainer.style.opacity = 0; // make old days go away smoothly using css transition
+        fetch(`/minilogistic/days?selected=${date}&horizontal=${toggle}`)
+            .then((response) => response.json())
+            .then((data) => {
+                setTimeout(() => {
+                    daySectionContainer.innerHTML = data.rendered_day_section;
+    
+                    daySectionContainer.style.opacity = 1; // make new days appear smoothly with css transition
+    
+                    createEventListeners(); // Initialize event listeners for the new day-sections Add buttons to open forms
+                }, 500); // Wait for 500ms before updating the content and making it visible again
+            })
+            .catch((error) => console.error(error));
+    }
+
+
     datePicker.addEventListener("input", () => {  
 
-      const date = datePicker.value; // get new date selected on date picker
-    
-      //console.log(date);
-  
-      daySectionContainer.style.opacity = 0; //make old days go away smoothly using css transition
-      fetch(`/minilogistic/days?selected=${date}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setTimeout(() => {
-            daySectionContainer.innerHTML = data.rendered_day_section;
-            daySectionContainer.style.opacity = 1; // make new days appear smoothly with css transition
+        const toggle = horizontalToggle.checked;
+       
+        updateView(toggle);
+        
 
-            
-            createEventListeners(); // Initialize event listeners for the new day-sections Add buttons to open forms
-
-          }, 500); // Wait for 500ms before updating the content and making it visible again
-        })
-        .catch((error) => console.error(error));
     });
+
 
     // Add arrival time field to new clean form when same day is selected
     document.addEventListener("change", function (event) {
@@ -39,6 +47,46 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // ------------------------------------------------------------------- //
+
+    
+    
+
+    // ------------ Horizontal Toggle ------------------------------------ //
+    horizontalToggle.addEventListener("change", () => {
+        const toggle = horizontalToggle.checked;
+        console.log('toggle value:', toggle); // Log the toggle value
+        const url = '/minilogistic/update-toggle/';
+        const data = { toggle: toggle };
+        console.log('data:', data); // Log the data object
+    
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Error updating toggle.");
+            }
+        })
+        .then(data => {
+            console.log(data); 
+    
+            // Refresh the front-end view by triggering the date picker event
+            updateView(toggle);
+        })
+        .catch(error => console.error(error));
+    });
+    
+    
+        
+        
     
 
 
@@ -58,15 +106,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 fetch(bookingFormUrl)
                     .then(response => response.text())
                     .then(html => {
-                        // Find the .form-container element within the same day-section as the clicked button
+                        // Find form-container element within the same day-section as the clicked button
                         var formContainer = event.target.closest('.day-section').querySelector('.form-container');
                         formContainer.style.maxHeight = "500px"; // Set max-height to 500px or a suitable value
                         // add the form
                         formContainer.innerHTML = html;
 
-                        // Extract the date value from the .section-date element
+                        // Extract the date value from the section-date element
                         var sectionDate = event.target.closest('.day-section').querySelector('.section-date').dataset.date;
-                        var dateValue = new Date(sectionDate);
 
                         // Set the value of the check-in input field with the extracted date value
                         var checkInInput = formContainer.querySelector('#arrival-date');
@@ -98,11 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
        
 
-
-
-
-
-
         // -------- New Clean Form ---------- //                            Note: I can probably make Booking Form and New Clean Form sections from the same code.. Alot of repetition here...
 
         // Display form
@@ -113,13 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 fetch(newcleanFormUrl)
                     .then(response => response.text())
                     .then(html => {
-                        // Find the .form-container element within the same day-section as the clicked button
+                        // Find form-container element within the same day-section as the clicked button
                         var formContainer = event.target.closest('.day-section').querySelector('.form-container');
                         // Make space for form
                         formContainer.style.maxHeight = "500px"; 
                         // Add the form
                         formContainer.innerHTML = html;
-                        // Extract the date value from the .section-date element
+                        // Extract the date value from section-date element
                         var sectionDate = event.target.closest('.day-section').querySelector('.section-date').dataset.date;
                         var dateValue = new Date(sectionDate);
 
@@ -181,6 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
             if (form.matches("#newclean-form")) {
                 const formData = new FormData(form);
+                console.log(formData)
         
                 // POST the data to the server
                 fetch(form.action, {
@@ -210,11 +253,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     } 
-
-   
-
-
-
 
     function getCookie(name) {
         let cookieValue = null;

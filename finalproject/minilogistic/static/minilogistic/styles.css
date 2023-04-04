@@ -7,8 +7,50 @@
   width: 18%;
   font-size: 40px;
   margin-left: 5px;
+  padding-top: 15px;
+  border-width: 0px;
+  border-radius: 25px;
   
 }
+
+
+/* Toggle button */
+.custom-switch.large {
+  position: absolute;
+  bottom: 30px;
+  right: 1px;
+}
+
+.large-switch .custom-control-input {
+  width: 2.5rem;
+  height: 1.25rem;
+  
+}
+.large-switch .custom-control-label {
+  padding-left: 3.25rem;
+  
+}
+.large-switch .custom-control-label::before {
+  width: 3rem;
+  height: 1.75rem;
+  border-radius: 1.65rem; /* Add this line to make the edges more rounded */
+  background-color: lightblue;
+  border-color: lightblue;
+  
+}
+.large-switch .custom-control-label::after {
+  width: 2rem;
+  height: 1.5rem;
+  border-radius: 50%; /* Add this line to make the edges more rounded */
+  
+}
+.large-switch .custom-control-input:checked~.custom-control-label::before {
+  background-color: lightblue; 
+  border-color: lightblue;
+}
+
+
+
 
 
 
@@ -16,11 +58,13 @@
   border-style: solid;
   border-color: lightblue;
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 25px;
   margin: 5px;
+  margin-bottom: 10px;
   padding: 5px;
   background-color: lightblue;
 }
+
 
 .day-section-container {
   transition: opacity 0.5s ease-in-out;
@@ -31,7 +75,7 @@
   border-style: solid;
   border-color: lightcoral;
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 25px;
   margin: 10px;
   padding: 5px;
   background-color: lightcoral;
@@ -45,10 +89,13 @@
 .clean-button {
   border-color: lightcoral;
   background-color: lightcoral;
+  border-radius: 25px;
+  margin-bottom: 10px;
 }
 .clean-button:hover {
   border-color: rgb(173, 92, 92);
   background-color: rgb(173, 92, 92);
+  border-radius: 25px;
 
 }
 
@@ -75,7 +122,7 @@
   border-style: solid;
   border-color: rgb(133, 133, 133);
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 25px;
   margin: 10px;
   padding: 5px;
   background-color: rgb(133, 133, 133);
@@ -85,11 +132,13 @@
 .booking-button {
   border-color: rgb(133, 133, 133);
   background-color: rgb(133, 133, 133);
+  border-radius: 25px;
 
 }
 .booking-button:hover {
   border-color: rgb(101, 101, 101);
   background-color: rgb(101, 101, 101);
+  border-radius: 25px;
 
 
 }
@@ -104,7 +153,7 @@
   border-style: solid;
   border-color: lightblue;
   border-width: 1px;
-  border-radius: 3px;
+  border-radius: 10px;
   margin: 5px;
   padding: 5px;
   background-color: lightblue;
@@ -112,33 +161,46 @@
 } 
 
 
+/* ----- Horizontal Agenda -------*/
+
+.no-wrap-row-hor {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.day-section.horiz {
+  border-style: solid;
+  border-color: lightblue;
+  border-width: 1px;
+  border-radius: 25px;
+  margin: 5px;
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: lightblue;
+
+  flex: 0 0 auto;
+  min-width: 100px; /* Adjust this value to your desired minimum column width */
+  max-width: 330px;
+  height: auto;
+  padding-right: 15px; /* Add padding to separate the columns */
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.day-section-content {
+  height: 100%;
+}
+
+
+
+
+
+
 /*-------------------------*
 
-#date-input {
-  display: none; /* hide the input field *
-}
- 
-label[for="date-input"]::after {
-  content: "\f073"; /* use an icon instead of text *
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  margin-left: 5px;
-  cursor: pointer;
-}
-
-/* styles for the calendar popup *
-input[type="date"]:focus::-webkit-calendar-picker-indicator {
-  display: block;
-  background: transparent;
-  width: 0.5em;
-  height: 0.5em;
-  margin-left: 5px;
-  margin-right: 5px;
-  color: #333;
-  opacity: 1;
-  cursor: pointer;
-}
-*/
 
 
 

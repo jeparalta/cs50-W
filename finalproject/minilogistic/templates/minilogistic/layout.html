@@ -29,14 +29,25 @@
                             <h1 style="color:lightcoral; font-weight: bold;">MINI</h1><h1 style="color:lightblue; font-weight: bold;">logistic</h1>
                         </div>
                         
+                        
+                        {% if user.is_authenticated %}
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Settings</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Log Out</a>
+                                <a class="nav-link" href="{% url 'minilogistic:logout' %}">Log Out</a>
+                            </li>
+                            <li class="nav-item">
+                                {% if user.is_authenticated %}
+                               <a class="nav-link"><strong>{{ user.username }}</strong></a>
+                            {% else %}
+                                Not signed in.
+                            {% endif %}
                             </li>
                         </ul>
+                        {% endif %}
+                       
                     </div>
                 </div>
             </nav>

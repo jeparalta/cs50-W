@@ -1,4 +1,9 @@
-{% for day in dates %}
+{% if agenda_horizontal == False %}
+
+
+    <div class="row">
+        <div class="col day-section-container" id="day-sections">
+            {% for day in dates %}
             
                 <div class="day-section">
 
@@ -58,5 +63,76 @@
                 </div>
             
             {% endfor %}
+        
 
+           
+        </div>
+        
+    </div>     
 
+{% else %}
+    <!--TEST SECTION-->
+
+<div class="container-fluid">    
+    <div class="row no-wrap-row-hor day-section-container" id="day-sections">
+            {% for day in dates %}
+                <div class="col day-section horiz">
+                    <div class="day-section-content">
+                        <h5 class="section-date" data-date="{{ day|date:'Y-m-d' }}">{{ day|date:"l, F j, Y" }}</h5>
+                        
+                        {% for clean in cleans %}
+                            {% if clean.date == day %}
+                            <div class="row clean-section horiz">
+                                <div class="col">
+                                    <div class="row">
+                                        <h4>{{ clean.location }}</h4>
+                                    </div>
+                                    <div class="row">
+                                        <p><b>Clean time:</b> {{ clean.start_time }}</p>
+                                    </div>
+                                    {% if clean.arrival_time %}
+                                    <div class="row">
+                                        <p><b>Same day arrival @</b> {{ clean.arrival_time }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for booking in bookings %}
+                            {% if booking.arrival_date == day %}
+                            <div class="row booking-section horiz">
+                                <div class="col">
+                                    <div class="row">
+                                        <h4>{{ booking.location }}</h4>
+                                    </div>
+                                    <div class="row">
+                                        <p><b>Guest:</b> {{ booking.firstname }} {{ booking.lastname }}</p>
+                                    </div>
+                                    <div class="row">
+                                        <p><b>Arrival:</b> {{ booking.arrival_time }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                     
+                            <div class="form-container form-transition horiz"></div> <!--Booking form appears here when Add Booking is clicked-->
+                        </div>
+                        <div class="row">
+                            <div class="col text-center button-container-bottom horiz">
+                                <button type="button" class="clean-button btn btn-info btn-lg horiz" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="add-booking-button" class="col text-center horiz">
+                                <button type="button" class="booking-button btn btn-info btn-lg horiz" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
+                            </div>
+                        </div>
+                </div>
+            {% endfor %}
+
+    </div>
+</div>
+{% endif %}

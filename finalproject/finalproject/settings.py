@@ -125,3 +125,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User model
 AUTH_USER_MODEL = 'minilogistic.User'
+
+# Login URL
+LOGIN_URL = '/minilogistic/login/'
