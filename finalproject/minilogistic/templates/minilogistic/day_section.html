@@ -1,3 +1,47 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                <div id="date-picker" class="row">
+                    <form>
+                        <input type="date" class="form-control" id="datepicker" value="{{ day|date:'Y-m-d' }}">
+                    </form>
+                </div>
+                </div>
+                <div class="col">
+                    {% if agenda_horizontal == False %}
+                    
+                    <form>
+                        <div class="custom-control custom-switch large">
+                            <div class="large-switch">
+                                <input type="checkbox" class="custom-control-input" id="horizontal" name="horizontal">
+                                <label class="custom-control-label" for="horizontal"></label>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <form>
+                        <div class="custom-control custom-switch large">
+                            <div class="large-switch">
+                                <input type="checkbox" class="custom-control-input" id="horizontal" name="horizontal" checked>
+                                <label class="custom-control-label" for="horizontal"></label>
+                            </div>
+                        </div>
+                    </form>
+                    
+                      
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+
+
 {% if agenda_horizontal == False %}
 
 
@@ -6,8 +50,21 @@
             {% for day in dates %}
             
                 <div class="day-section">
-
-                    <h5 class="section-date" data-date="{{ day|date:'Y-m-d' }}">{{ day|date:"l, F j, Y" }}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <div class="section-date-container">
+                                <h5 class="section-date" data-date="{{ day|date:'Y-m-d' }}">{{ day|date:"l, F j, Y" }}</h5>
+                                
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-end mr-3">
+                            <div class="full-day-link align-self-start mt-2">
+                                <a href="fullday/{{day|date:'Y-m-d'}}/"><p>Full Day</p></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
 
 
 
@@ -15,18 +72,34 @@
                     {% for clean in cleans %}
                         {% if clean.date == day %}
                         <div class="row clean-section">
-                            <div class="col">
-                                <h4>{{ clean.location }}</h4>
+                            <div class="col-3 item-col">
+                                
+                                    <h4><i class="fa-solid fa-house icon-margin-right"></i>{{ clean.location }}</h4>
+                                    
+                                
+                                
                             </div>
-                            <div class="col">
-                                <p><b>Clean time:</b> {{ clean.start_time }}</p>
+                            <div class="col-1"></div>
+                            <div class="col-4 item-col">
+                                
+                                    <div class="clean-item-container">
+                                        <p><b><i class="fa-regular fa-clock fa-lg icon-margin-right"></i>Clean start: </b> {{ clean.start_time }}</p>
+                                    </div>
+                                
                             </div>
-                            {% if clean.arrival_time %}
-                            <div class="col">
-                                <p><b>Same day arrival @</b> {{ clean.arrival_time }}</p>
+                            
+                            <div class="col-4">
+
+                                {% if clean.arrival_time %}
+                                <div class="clean-item-container">
+                                    <p><i class="fa-solid fa-lg fa-repeat icon-margin-right"></i><b>Same day arrival @</b> {{ clean.arrival_time }}</p>
+                                </div>
+                                {% endif%}
                             </div>
-                            {% endif%}
+                            
+                            
                         </div>
+                        
                         {% endif %}
                     {% endfor %}
 
@@ -34,68 +107,101 @@
                         {% if booking.arrival_date == day %}
                         <div class="row booking-section">
                             <div class="col">
-                                <h4>{{ booking.location }}</h4>
+                                
+                                    <h4><i class="fa-solid fa-house icon-margin-right"></i>{{ booking.location }}</h4>
+                                
                             </div>
                             <div class="col">
-                                <p><b>Guest:</b> {{ booking.firstname }} {{ booking.lastname }}</p>
+                                <div class="booking-item-container">
+                                    <p><b><i class="fa-regular fa-lg fa-user icon-margin-right"></i>Guest:</b> {{ booking.firstname }} {{ booking.lastname }}</p>
+                                </div>
                             </div>
                             <div class="col">
-                                <p><b>Arrival:</b> {{ booking.arrival_time }}</p>
+                                <div class="booking-item-container">
+                                    <p><b><i class="fa-solid fa-lg fa-user-clock icon-margin-right"></i>Arrival:</b> {{ booking.arrival_time }}</p>
+                                </div>
                             </div>
+                            
                         </div>
                         {% endif %}
                     {% endfor %}
                         <div class="form-container form-transition"></div> <!--Booking form appears here when Add Booking is clicked-->
                             
-                          
+                        
 
                         
-                        
-                    <div class="row">
-                        <div class="col text-right button-container">
-                            <button type="button" class="clean-button btn btn-info btn-lg" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
+                    <div class="add-buttons-container"> 
+                        <div class="row">
+                            <div class="col text-right button-container">
+                                <button type="button" class="clean-button btn btn-info btn-lg" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
+                            </div>
+                            <div id="add-booking-button" class="col text-left">
+                                <button type="button" class="booking-button btn btn-info btn-lg" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
+                            </div>
                         </div>
-                        <div id="add-booking-button" class="col text-left">
-                            <button type="button" class="booking-button btn btn-info btn-lg" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
-                        </div>
-                    </div>
+                    </div> 
                     
                 </div>
             
             {% endfor %}
-        
+    
 
-           
+            
         </div>
         
     </div>     
 
 {% else %}
-    <!--TEST SECTION-->
+    <!--HORIZ SECTION-->
 
 <div class="container-fluid">    
     <div class="row no-wrap-row-hor day-section-container" id="day-sections">
             {% for day in dates %}
                 <div class="col day-section horiz">
                     <div class="day-section-content">
-                        <h5 class="section-date" data-date="{{ day|date:'Y-m-d' }}">{{ day|date:"l, F j, Y" }}</h5>
-                        
+                        <div class="row">
+                            <div class="col">
+                                <div class="section-date-container">
+                                    <h5 class="section-date" data-date="{{ day|date:'Y-m-d' }}">{{ day|date:"l, F j, Y" }}</h5>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-end mr-3">
+                                <div class="full-day-link align-self-start mt-2">
+                                    <a href="fullday/{{day|date:'Y-m-d'}}/"><p>Full Day</p></a>
+                                </div>
+                            </div>
+
+                        </div>
                         {% for clean in cleans %}
                             {% if clean.date == day %}
                             <div class="row clean-section horiz">
                                 <div class="col">
                                     <div class="row">
-                                        <h4>{{ clean.location }}</h4>
+                                        
+                                            <h4><i class="fa-solid fa-house icon-margin-right"></i>{{ clean.location }}</h4>
+                                        
                                     </div>
                                     <div class="row">
-                                        <p><b>Clean time:</b> {{ clean.start_time }}</p>
+                                        <div class="col">
+                                            <div class="clean-item-container">
+                                                <p><b><i class="fa-regular fa-clock fa-lg icon-margin-right"></i>Clean start: </b> {{ clean.start_time }}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                    {% if clean.arrival_time %}
+                                   
                                     <div class="row">
-                                        <p><b>Same day arrival @</b> {{ clean.arrival_time }}</p>
+                                        <div class="col">
+                                            {% if clean.arrival_time %}
+                                            <div class="clean-item-container">
+                                                <p><b><i class="fa-solid fa-lg fa-repeat icon-margin-right"></i>Same day arrival @</b> {{ clean.arrival_time }}</p>
+                                            </div>
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    {% endif %}
+                                    
+                                    
                                 </div>
+                                
                             </div>
                             {% endif %}
                         {% endfor %}
@@ -105,29 +211,45 @@
                             <div class="row booking-section horiz">
                                 <div class="col">
                                     <div class="row">
-                                        <h4>{{ booking.location }}</h4>
+                                        
+                                            <h4><i class="fa-solid fa-house icon-margin-right"></i>{{ booking.location }}</h4>
+                                        
                                     </div>
                                     <div class="row">
-                                        <p><b>Guest:</b> {{ booking.firstname }} {{ booking.lastname }}</p>
+                                        <div class="col">
+                                            <div class="booking-item-container">
+                                                <p><b><i class="fa-regular fa-lg fa-user icon-margin-right"></i>Guest:</b> {{ booking.firstname }} {{ booking.lastname }}</p>
+                                                
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row">
-                                        <p><b>Arrival:</b> {{ booking.arrival_time }}</p>
+                                        <div class="col">
+                                            <div class="booking-item-container">
+                                                <p><b><i class="fa-solid fa-lg fa-user-clock icon-margin-right"></i>Arrival:</b> {{ booking.arrival_time }}</p>
+                                            </div>
+                                        </div>
                                     </div>
+                                    
+                                    
                                 </div>
+                                
                             </div>
                             {% endif %}
                         {% endfor %}
-                     
+                    
                             <div class="form-container form-transition horiz"></div> <!--Booking form appears here when Add Booking is clicked-->
                         </div>
-                        <div class="row">
-                            <div class="col text-center button-container-bottom horiz">
-                                <button type="button" class="clean-button btn btn-info btn-lg horiz" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
+                        <div class="add-buttons-container">
+                            <div class="row">
+                                <div class="col text-center button-container-bottom horiz">
+                                    <button type="button" class="clean-button btn btn-info btn-lg horiz" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div id="add-booking-button" class="col text-center horiz">
-                                <button type="button" class="booking-button btn btn-info btn-lg horiz" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
+                            <div class="row">
+                                <div id="add-booking-button" class="col text-center horiz">
+                                    <button type="button" class="booking-button btn btn-info btn-lg horiz" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
+                                </div>
                             </div>
                         </div>
                 </div>

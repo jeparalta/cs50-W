@@ -1,0 +1,267 @@
+<div class="row">
+    <div class="col day-section-container" id="day-sections">
+        
+        
+            <div class="day-section">
+                <div class="fullday-section-date-container">
+                    <h2 class="section-date" data-date="{{ day|date:'Y-m-d' }}">{{ day|date:"l, F j, Y" }}</h2>
+                </div>
+
+
+
+
+                {% for clean in cleans %}
+                    {% if clean.date == day %}
+                    
+                    <div class="row clean-section">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    
+                                        <h4><i class="fa-solid fa-house icon-margin-right"></i>{{ clean.location }}</h4>
+                                    
+                                </div>
+                                
+                                
+                                
+                                <div class="col">
+                                    
+                                </div>
+                               
+                                <div>
+                                    <i class="fa fa-ellipsis-v clean-edit-icon" style="font-size:30px;"></i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        
+                                        <div class="clean-item-container-title">
+                                            <p><b><i class="fa-regular fa-user fa-lg icon-margin-right"></i>   Cleaners</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="clean-item-container">
+                                                {% if clean.cleaners.all %}
+                                                    <ul>
+                                                        {% for cleaner in clean.cleaners.all %}
+                                                           
+                                                                <li><i class="fa-regular fa-user icon-margin-right"></i>{{ cleaner }}</li>
+                                                            
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <li>No cleaners assigned.</li>
+                                                    </ul>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="clean-item-container-title">
+                                            <p><b><i class="fa-regular fa-clock fa-lg icon-margin-right"></i>Clean start</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="clean-item-container">
+                                            <p>{{ clean.start_time }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="clean-item-container-title">
+                                            <p><b><i class="fa-solid fa-lg fa-hourglass-half icon-margin-right"></i>Duration</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="clean-item-container">
+                                            <p>{{ clean.duration }}h</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                            
+                            <div class="row">
+
+                                <div class="col clean-item-container-title">
+                                    <p><b>Comments</b></p>
+                                </div>
+                                <div class="col"></div>
+                                <div class="col">
+                                    {% if clean.arrival_time %}
+                                    <div class="clean-item-container-title">
+                                        <p><b><i class="fa-solid fa-lg fa-repeat icon-margin-right"></i>Same day arrival @</b> {{ clean.arrival_time }}</p>
+                                    </div>
+                                    {% endif%}
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="comments-section">
+                                    <div class="col">
+                                        <ul class="comment-list">
+                                            {% for comment in clean.comments.all %}
+                                                
+                                                <div class="clean-comment-container">
+                                                    <li> {{ comment.body }}</li>
+                                                </div>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                        
+                                        
+                                    
+                                    
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <form class="add-comment-form" id="add_comment_form" action="{% url 'minilogistic:addcomment' %}" method="POST">
+                                        <input type="text" hidden value="{{ clean.id }}" name="cleanId">
+                                        <input type="text" hidden value="{{ day }}" name="selected">
+                                        
+                                        <div class="d-flex flex-column align-items-end">
+                                            <input type="text" placeholder="New Comment" class="form-control mb-2 clean-comment-body" id="comment-body" name="comment_body" required>
+                                            <div class="row">
+                                                <div class="col d-flex align-items-center">
+                                                    <div class="form-group mb-0">
+                                                        
+                                                        <select class="form-control" id="comment-color">
+                                                        <option>Green</option>
+                                                        <option>Blue</option>
+                                                        <option>Red</option>
+                                                        <option>Grey</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <button type="submit" class="btn btn-info submit-comment-button clean-comment-button">Add Comment</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col">
+
+                                </div>
+                            </div> 
+                                
+                            
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% for booking in bookings %}
+                    {% if booking.arrival_date == day %}
+                    <div class="row booking-section">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    
+                                        <h4><i class="fa-solid fa-house icon-margin-right"></i>{{ booking.location }}</h4>
+                                    
+                                </div>
+                                <div class="row"></div>
+                                <div>
+                                    <i class="fa fa-ellipsis-v booking-edit-icon" style="font-size:30px;"></i>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="booking-item-container">
+                                        <p><b>Guest:</b> {{ booking.firstname }} {{ booking.lastname }}</p>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="booking-item-container">
+                                        <p><b>Arrival:</b> {{ booking.arrival_time }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="booking-item-container">
+                                    <p><b>Comments:</b></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="comments-section">
+                                    <div class="col">
+                                        <ul class="comment-list">
+                                            {% for comment in booking.comments.all %}
+                                                <div class="booking-item-container">
+                                                    <li> {{ comment.body }}</li>
+                                                </div>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                        
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col">
+                                    <form class="add-comment-form" id="add_comment_form" action="{% url 'minilogistic:addcomment' %}" method="POST">
+                                        <input type="text" hidden value="{{ booking.id }}" name="bookingId">
+                                        <input type="text" hidden value="{{ day }}" name="selected">
+                                        
+                                        <div class="d-flex flex-column align-items-end">
+                                            <input type="text" placeholder="New Comment" class="form-control mb-2 booking-comment-body" id="comment-body" name="comment_body" required>
+                                            <div class="row">
+                                                <div class="col d-flex align-items-center">
+                                                    <div class="form-group mb-0">
+                                                        
+                                                        <select class="form-control" id="comment-color">
+                                                        <option>Green</option>
+                                                        <option>Blue</option>
+                                                        <option>Red</option>
+                                                        <option>Grey</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <button type="submit" class="btn btn-info submit-comment-button booking-comment-button">Add Comment</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col">
+
+                                </div>
+                            </div> 
+                            
+                        </div>
+                        
+                    </div>
+                    
+                    {% endif %}
+                {% endfor %}
+                    <div class="form-container form-transition"></div> <!--Booking form appears here when Add Booking is clicked-->
+                        
+                      
+
+                    
+                    
+                <div class="row">
+                    <div class="col text-right button-container">
+                        <button type="button" class="clean-button btn btn-info btn-lg" data-newclean-form-url="{% url 'minilogistic:newcleanform' %}">Add Clean</button>
+                    </div>
+                    <div id="add-booking-button" class="col text-left">
+                        <button type="button" class="booking-button btn btn-info btn-lg" data-booking-form-url="{% url 'minilogistic:bookingform' %}">Add Booking</button>
+                    </div>
+                </div>
+                
+            </div>
+        
+    </div>
+    
+</div> 

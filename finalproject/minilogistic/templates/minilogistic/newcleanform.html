@@ -5,6 +5,7 @@
                 <h4 class="form-header text-center">New Clean</h4>
             </div>
         </div>
+
         <div class="row">
             <div style="padding-top: 31.8px;" class="col-md-4 form-group">
                
@@ -25,11 +26,12 @@
             </div>
             
         </div>
+
         <div class="row">
             
             
             <div class="col-md-4 form-group">
-                <select class="form-control" id="cleaners-assigned" name="cleaners_assigned[]" multiple required>
+                <select class="form-control" id="cleaners-assigned" name="cleaners_assigned[]" multiple>
                     <option value="" disabled="true">Cleaners</option>
                     {% for cleaner in cleaners %}
                         <option value="{{ cleaner.id }}">{{ cleaner.name }}</option>
@@ -38,6 +40,7 @@
             </div>
             
         </div>
+
         <div class="row align-items-end">
             
             <div class="col-md-4 form-group">
@@ -54,8 +57,20 @@
 
             </div>
             
-            <div class="col-md-4 form-group text-right">
-                <button type="submit" class="btn btn-info">Add Clean</button>
+        </div>
+        <div class="row newclean-form-row align-items-end form-button-row">
+            <div class="col-md-4 col-sm-12 form-group booking-form-col text-right">
+                
+            </div>
+    
+            <div class="col-md-4 col-sm-12 form-group newclean-form-col d-flex flex-column">
+                <div class="cancel-form-container">
+                    <p class="cancel-form text-right mb-1">Cancel</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-sm-12 form-group newclean-form-col text-right">
+                <button type="submit" class="btn btn-info submit-newclean-button">Add Clean</button>
             </div>
         </div>
     </div>

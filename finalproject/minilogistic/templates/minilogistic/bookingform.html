@@ -1,14 +1,19 @@
 <form id="booking-form" action="{% url 'minilogistic:newbooking' %}" method="POST">
     {% csrf_token %}
 
+    <!--
+    {% if agenda_horizontal == False %}
+
     <div class="booking-section">
+        
         <div class="row">
             <div class="col-12">
                 <h4 class="form-header text-center">New Booking</h4>
             </div>
+            
         </div>
         <div class="row">
-            <div class="col-md-4 form-group">
+            <div class=" form-group col-md-4 ">
                 <select class="form-control" id="locationSelect" name="location" required>
                     <option value="" selected disabled>Location</option>
                     {% for location in locations %}
@@ -16,39 +21,116 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-4 form-group">
+            <div class="col-md-4  form-group ">
                 <input type="text" placeholder="First Name" class="form-control" id="first-name" name="first_name" required>
             </div>
-            <div class="col-md-4 form-group">
+            <div class="col-md-4 form-group ">
                 <input type="text" placeholder="Last Name" class="form-control" id="last-name" name="last_name" required>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 form-group">
+        <div class="row ">
+            <div class="col-md-4 form-group ">
                 <label for="check-in">Check-in</label>
                 <input type="date" class="form-control" id="arrival-date" name="arrival_date" required>
             </div>
-            <div class="col-md-4 form-group">
+            <div class="col-md-4 form-group ">
                 <label for="check-out">Check-out</label>
                 <input type="date" class="form-control" id="departure-date" name="departure_date" required>
             </div>
         </div>
         <div class="row align-items-end">
-            <div class="col-md-4 form-group">
+            <div class="col-md-4  form-group ">
                 <label for="time-input">Arrival Time</label>
                 <input type="time" class="form-control" id="arrival-time" name="arrival_time" required>
             </div>
-            <div class="col-md-4 form-group">
+            <div class="col-md-4 form-group ">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="selfCheckin">
                     <label class="form-check-label" for="selfCheckin">Self Check-in</label>
                 </div>
             </div>
+           
             <div class="col-md-4 form-group text-right">
                 <button type="submit" class="btn btn-info">Add Booking</button>
             </div>
         </div>
     </div>
+
+    
+    {% else %} 
+
+-->
+    
+    <div class="booking-section">
+        
+        <div class="row booking-form-row">
+            <div class="col-12">
+                <h4 class="form-header text-center">New Booking</h4>
+            </div>
+        </div>
+        
+        <div class="row booking-form-row">
+            <div class=" form-group col-md-4 col-sm-12 booking-form-col">
+                <select class="form-control" id="locationSelect" name="location" required>
+                    <option value="" selected disabled>Location</option>
+                    {% for location in locations %}
+                        <option value="{{ location.id }}">{{ location.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <input type="text" placeholder="First Name" class="form-control" id="first-name" name="first_name" required>
+            </div>
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <input type="text" placeholder="Last Name" class="form-control" id="last-name" name="last_name" required>
+            </div>
+        </div>
+
+        <div class="row booking-form-row">
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <label for="check-in">Check-in</label>
+                <input type="date" class="form-control" id="arrival-date" name="arrival_date" required>
+            </div>
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <label for="check-out">Check-out</label>
+                <input type="date" class="form-control" id="departure-date" name="departure_date" required>
+            </div>
+        </div>
+
+        <div class="row booking-form-row align-items-end">
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <label for="time-input">Arrival Time</label>
+                <input type="time" class="form-control" id="arrival-time" name="arrival_time" required>
+            </div>
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="selfCheckin">
+                    <label class="form-check-label" for="selfCheckin">Self Check-in</label>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <div class="row booking-form-row align-items-end form-button-row">
+            <div class="col-md-4 col-sm-12 form-group booking-form-col text-right">
+                
+            </div>
+    
+            <div class="col-md-4 col-sm-12 form-group booking-form-col d-flex flex-column">
+                <div class="cancel-form-container">
+                    <p class="cancel-form text-right mb-1">Cancel</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-sm-12 form-group booking-form-col text-right">
+                <button type="submit" class="btn btn-info submit-booking-button">Add Booking</button>
+            </div>
+        </div>
+        
+    </div>
+    {% endif %}
+
 </form>
 
 

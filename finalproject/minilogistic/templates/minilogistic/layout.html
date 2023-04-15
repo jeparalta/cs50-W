@@ -9,9 +9,9 @@
     
         
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         
         
          
@@ -26,14 +26,17 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="d-flex align-items-center mr-auto">
-                            <h1 style="color:lightcoral; font-weight: bold;">MINI</h1><h1 style="color:lightblue; font-weight: bold;">logistic</h1>
+                            <a class="nav-link" href="{% url 'minilogistic:agenda' %}" style="display: inline-flex;">
+                                <h1 style="color:lightcoral; font-weight: bold;">MINI</h1>
+                                <h1 style="color:lightblue; font-weight: bold;">logistic</h1>
+                            </a>
                         </div>
                         
                         
                         {% if user.is_authenticated %}
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Settings</a>
+                                <a class="nav-link" href="{% url 'minilogistic:settings' %}">Settings</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'minilogistic:logout' %}">Log Out</a>
