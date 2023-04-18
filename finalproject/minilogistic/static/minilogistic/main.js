@@ -216,7 +216,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Display form
         document.querySelectorAll('.clean-button').forEach((button) => {
             button.addEventListener('click', (event) => {
-                var newcleanFormUrl = event.target.getAttribute('data-newclean-form-url');
+                // var newcleanFormUrl = event.target.getAttribute('data-newclean-form-url');
+                var newcleanFormUrl = "/minilogistic/newcleanform/";
+
                 
                 fetch(newcleanFormUrl)
                     .then(response => response.text())

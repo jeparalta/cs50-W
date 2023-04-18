@@ -313,6 +313,29 @@ def newclean_form(request):
         "cleaners":cleaners
     }, request))
 
+def editclean_form(request, cleanid):
+    user = request.user
+    # Get account that is currently selected
+    selector = Selector.objects.filter(user=user).first()
+    selected_account= selector.account
+
+    # Get clean to be edited
+    clean = Clean.objects.filter(id=cleanid).first()
+
+    template = loader.get_template('minilogistic/editcleanform.html')
+
+    # Get locations and options for this user account
+    locations = Location.objects.filter(account=selected_account)
+    cleaners = Cleaner.objects.filter(account=selected_account)
+
+    # Get existing data for this clean
+
+    return HttpResponse(template.render({
+        "locations":locations,
+        "cleaners":cleaners,
+        "clean":clean
+    }, request))
+
 
 def new_booking(request):
 

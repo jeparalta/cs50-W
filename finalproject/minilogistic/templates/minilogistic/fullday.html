@@ -46,7 +46,7 @@
                     {% for clean in cleans %}
                         {% if clean.date == day %}
                         
-                        <div class="row clean-section">
+                        <div class="row clean-section" id="clean-section-{{clean.id}}">
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
@@ -62,7 +62,7 @@
                                     </div>
                                    
                                     <div>
-                                        <i class="fa fa-ellipsis-v clean-edit-icon" style="font-size:30px;"></i>
+                                        <i class="fa fa-ellipsis-v clean-edit-icon" style="font-size:30px;" data-cleanid="{{ clean.id }}"></i>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -444,6 +444,7 @@
 {% block scripts %}
 
 <script src="{% static 'minilogistic/main.js' %}"></script>
+<script src="{% static 'minilogistic/edit.js' %}"></script>
 {% endblock %}
 
 

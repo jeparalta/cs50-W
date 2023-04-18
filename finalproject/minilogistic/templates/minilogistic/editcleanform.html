@@ -2,7 +2,9 @@
     <div class="clean-section">
         <div class="row">
             <div class="col-12">
-                <h4 class="form-header text-center">New Clean</h4>
+                <h4 class="form-header text-center">Edit Clean</h4>
+                <p>{{clean.cleaners.all}}</p>
+                
             </div>
         </div>
 
@@ -10,7 +12,7 @@
             <div style="padding-top: 31.8px;" class="col-md-4 form-group">
                
                 <select class="form-control" id="locationSelect" name="location" required>
-                    <option value="" selected disabled="true">Location</option>
+                    <option value="" selected disabled="true">{{ clean.location }}</option>
                     {% for location in locations %}
                         <option value="{{ location.id }}">{{ location.name }}</option>
                     {% endfor %}
@@ -18,11 +20,11 @@
             </div>
             <div class="col-md-4 form-group">
                 <label for="clean-date">Clean date</label>
-                <input type="date" class="form-control" id="clean-date" name="clean_date" required>
+                <input type="date" class="form-control" id="clean-date" name="clean_date" value="{{ clean.date|date:'Y-m-d' }}"required>
             </div>
             <div class="col-md-4 form-group">
                 <label for="start_time">Clean start</label>
-                <input type="time" class="form-control" id="start-time" name="start_time" required>
+                <input type="time" class="form-control" id="start-time" name="start_time"  value="{{ clean.start_time|date:'H:i' }}" required>
             </div>
             
         </div>
@@ -34,9 +36,14 @@
                 <select class="form-control" id="cleaners-assigned" name="cleaners_assigned[]" multiple>
                     <option value="" disabled="true">Cleaners</option>
                     {% for cleaner in cleaners %}
+                    {% if cleaner in clean.cleaners.all %}
+                        <option value="{{ cleaner.id }}" selected>{{ cleaner.name }}</option>
+                    {% else %}
                         <option value="{{ cleaner.id }}">{{ cleaner.name }}</option>
+                    {% endif %}
                     {% endfor %}
                 </select>
+                
             </div>
             
         </div>
@@ -45,15 +52,28 @@
             
             <div class="col-md-4 form-group">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="same-day" name="same_day">
+                    {% if clean.same_day %}
+                    <input type="checkbox" class="form-check-input" id="same-day" name="same_day" checked>
                     <label class="form-check-label" for="sameDay">Same day arrival?</label>
                 </div>
             </div>
             <div class="col-md-4 form-group" >
-                <div id="clean-form-arrival-time-container">
+                <div id="clean-form-arrival-time-container" style="display:block;">
                 <label for="time-input">Arrival Time</label>
-                <input type="time" class="form-control" id="arrival-time" name="arrival_time">
+                <input type="time" class="form-control" id="arrival-time" name="arrival_time" value="{{clean.arrival_time|date:'H:i'}}">
                 </div>
+                    {% else %}
+                    <input type="checkbox" class="form-check-input" id="same-day" name="same_day">
+                    
+                    <label class="form-check-label" for="sameDay">Same day arrival?</label>
+                </div>
+        </div>
+            <div class="col-md-4 form-group" >
+                    <div id="clean-form-arrival-time-container">
+                        <label for="time-input">Arrival Time</label>
+                        <input type="time" class="form-control" id="arrival-time" name="arrival_time">
+                    </div>
+                {% endif %}
 
             </div>
             
