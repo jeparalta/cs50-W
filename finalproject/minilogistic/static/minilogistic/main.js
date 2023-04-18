@@ -390,11 +390,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 //console.log("Comment button clicked") 
 
-                event.preventDefault();
-                event.stopImmediatePropagation();
+                
 
                 const form = event.target.closest("form");
                 const formData = new FormData(form)
+
+                console.log(formData)
 
                 const commentBody = form.querySelector("#comment-body");
                 if (commentBody.value.trim() === "") {
@@ -402,6 +403,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert("New Comment field cannot be empty.");
                     return;
                 }
+
+                //event.preventDefault();
+                //event.stopImmediatePropagation();
 
                 console.log("Form data:", Array.from(formData.entries()));
 
@@ -423,11 +427,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         li.textContent = newComment.fields.body;
 
                         const div = document.createElement("div");
-                        div.className = newComment.fields.clean ? 'clean-comment-container' : 'booking-comment-container';
+                        div.className = newComment.fields.clean_belong ? `clean-comment-container comment-color-${newComment.fields.color}` : `booking-comment-container comment-color-${newComment.fields.color}`;
 
                         div.appendChild(li)
 
-                        // Find the closest ul element for clean or booking comments
                         const comment_list = form.closest("div.row").previousElementSibling.querySelector(".comments-section ul");
 
                         setTimeout(() => {
@@ -464,6 +467,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+
+
+    // -------- FOR CSRF TOKEN VALIDATION ----------------------- //
 
     function getCookie(name) {
         let cookieValue = null;

@@ -12,7 +12,7 @@ import time
 from django.template import loader
 from django.template.loader import render_to_string
 
-from .models import User, Account, AccountUser, PermissionLevel, Location, Cleaner, Booking, Contractor, Clean, Selector, Comment
+from .models import User, Account, AccountUser, PermissionLevel, Location, Cleaner, Booking, Contractor, Clean, Selector, Comment, ColorCode
 
 # Create your views here.
 
@@ -400,11 +400,13 @@ def add_comment(request):
         
 
         body = request.POST.get("comment_body")
+        color = request.POST.get("comment_color")
+        color_code = ColorCode[color.upper()].value
 
         if clean:
-            new_comment = Comment(account=account, commenter=user, clean=clean, body=body)
+            new_comment = Comment(account=account, commenter=user, clean_belong=clean, body=body, color=color_code)
         elif booking:
-            new_comment = Comment(account=account, commenter=user, booking=booking, body=body)
+            new_comment = Comment(account=account, commenter=user, booking_belong=booking, body=body, color=color_code)
 
         new_comment.save()
 

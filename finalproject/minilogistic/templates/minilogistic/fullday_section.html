@@ -89,25 +89,31 @@
                             <div class="row">
 
                                 <div class="col clean-item-container-title">
-                                    <p><b>Comments</b></p>
+                                    <p><b>Comments <i class="fa-regular fa-xl fa-comment-dots icon-margin-left"></i> </b></p>
                                 </div>
+
                                 <div class="col"></div>
+                                
                                 <div class="col">
-                                    {% if clean.arrival_time %}
-                                    <div class="clean-item-container-title">
+                                    <div class="row">
+                                      <div class="clean-item-container-title">
+                                        {% if clean.arrival_time %}
                                         <p><b><i class="fa-solid fa-lg fa-repeat icon-margin-right"></i>Same day arrival @</b> {{ clean.arrival_time }}</p>
+                                        {% endif %}
+                                      </div>
                                     </div>
-                                    {% endif%}
                                 </div>
+                                    
+                                
                                 
                             </div>
                             <div class="row">
                                 <div class="comments-section">
                                     <div class="col">
                                         <ul class="comment-list">
-                                            {% for comment in clean.comments.all %}
+                                            {% for comment in clean.clean_comments.all %}
                                                 
-                                                <div class="clean-comment-container">
+                                                <div class="clean-comment-container comment-color-{{comment.color}}">
                                                     <li> {{ comment.body }}</li>
                                                 </div>
                                             {% endfor %}
@@ -131,12 +137,12 @@
                                                 <div class="col d-flex align-items-center">
                                                     <div class="form-group mb-0">
                                                         
-                                                        <select class="form-control" id="comment-color">
-                                                        <option>Green</option>
-                                                        <option>Blue</option>
-                                                        <option>Red</option>
-                                                        <option>Grey</option>
-                                                        </select>
+                                                        <select class="form-control" id="comment-color" name="comment_color" required>
+                                                            <option value="green">Green</option>
+                                                            <option value="blue">Blue</option>
+                                                            <option value="red">Red</option>
+                                                            <option value="grey">Grey</option>
+                                                            </select>
                                                     </div>
                                                 </div>
                                                 <div class="col">
@@ -173,31 +179,153 @@
                                 </div>
                                 
                             </div>
+
+
+
+
                             <div class="row">
                                 <div class="col">
-                                    <div class="booking-item-container">
-                                        <p><b>Guest:</b> {{ booking.firstname }} {{ booking.lastname }}</p>
+                                    <div class="row">
+                                        
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-regular fa-user fa-lg icon-margin-right"></i>Name</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                            <div class="booking-item-container">
+                                               <p>{{ booking.firstname }} {{ booking.lastname }}</p> 
+                                            </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-solid fa-hashtag icon-margin-right"></i>Guests</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                            <div class="booking-item-container">
+                                               <p>{{ booking.number_pax }}</p> 
+                                            </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-solid fa-at fa-lg icon-margin-right"></i>Email</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="booking-item-container">
+                                            {% if booking.email %}
+                                            <p>{{ booking.email }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-solid fa-phone fa-lg icon-margin-right"></i>Phone</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="booking-item-container">
+                                            {% if booking.phone_number %}
+                                            <p>{{ booking.phone_number }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-solid fa-calendar-days fa-lg icon-margin-right"></i>Arrival</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                            <div class="booking-item-container">
+                                               <p>{{ booking.arrival_date }}</p> 
+                                            </div>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-solid fa-calendar-days fa-lg icon-margin-right"></i>Departure</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="booking-item-container">
+                                           
+                                            <p>{{ booking.departure_date }}</p>
+                                           
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="booking-item-container">
-                                        <p><b>Arrival:</b> {{ booking.arrival_time }}</p>
+                                    <div class="row">
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-regular fa-clock fa-lg icon-margin-right"></i></i>Arrival time</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="booking-item-container">
+                                            {% if booking.arrival_time %}
+                                            <p>{{ booking.arrival_time }}</p>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="booking-item-container-title">
+                                            <p><b><i class="fa-solid fa-key fa-lg icon-margin-right"></i>Self check-in</b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="booking-item-container">
+                                            {% if booking.self_check_in == True %}
+                                            <p>Yes</p>
+                                            {% else %}
+                                            <p>No</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                
                             </div>
 
                             <div class="row">
                                 <div class="booking-item-container">
-                                    <p><b>Comments:</b></p>
+                                    <p><b><i class="fa-regular fa-xl fa-comment-dots icon-margin-right"></i>Comments:</b></p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="comments-section">
                                     <div class="col">
                                         <ul class="comment-list">
-                                            {% for comment in booking.comments.all %}
-                                                <div class="booking-item-container">
-                                                    <li> {{ comment.body }}</li>
+                                            {% for comment in booking.booking_comments.all %}
+                                                <div class="booking-comment-container comment-color-{{comment.color}}">
+                                                    <li>{{ comment.body }}</li>
                                                 </div>
                                             {% endfor %}
                                         </ul>
@@ -216,14 +344,15 @@
                                         <div class="d-flex flex-column align-items-end">
                                             <input type="text" placeholder="New Comment" class="form-control mb-2 booking-comment-body" id="comment-body" name="comment_body" required>
                                             <div class="row">
+                                                
                                                 <div class="col d-flex align-items-center">
-                                                    <div class="form-group mb-0">
+                                                    <div class=" mb-0">
                                                         
-                                                        <select class="form-control" id="comment-color">
-                                                        <option>Green</option>
-                                                        <option>Blue</option>
-                                                        <option>Red</option>
-                                                        <option>Grey</option>
+                                                        <select class="form-control" id="comment-color" name="comment_color" required>
+                                                        <option value="green">Green</option>
+                                                        <option value="blue">Blue</option>
+                                                        <option value="red">Red</option>
+                                                        <option value="grey">Grey</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -264,4 +393,4 @@
         
     </div>
     
-</div> 
+</div>  

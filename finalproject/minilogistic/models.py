@@ -13,12 +13,13 @@ class PermissionLevel(Enum):
         return self.value
     
 class ColorCode(Enum):
-    GREEN = 'Green'
-    RED = 'Red'
-    BLUE = 'Blue'
+    GREEN = 'green'
+    RED = 'red'
+    BLUE = 'blue'
+    GREY = 'grey'
 
     def __str__(self):
-        return self.value
+        return f"{self.value}"
 
 
 class User(AbstractUser):
@@ -88,6 +89,7 @@ class Booking(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="bookings")
     firstname = models.CharField(max_length=64)
     lastname = models.CharField(max_length=64)
+    number_pax = models.IntegerField(default=0)
     email = models.EmailField(blank=True)
     phone_number = PhoneNumberField(blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.PROTECT, related_name="bookings")
@@ -135,13 +137,13 @@ class Clean(models.Model):
         return f"Clean: {self.location} on {self.date}"
 
 class Comment(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="comments")
-    commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="comments", blank=True, null=True)
-    clean = models.ForeignKey(Clean, on_delete=models.CASCADE, related_name="comments", blank=True, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name="account_comments")
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comments")
+    booking_belong = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="booking_comments", blank=True, null=True)
+    clean_belong = models.ForeignKey(Clean, on_delete=models.CASCADE, related_name="clean_comments", blank=True, null=True)
     date_created = models.DateTimeField(default= datetime.today)
     active = models.BooleanField(default=True)
-    color = models.CharField(max_length=20, choices=[(color, color.value) for color in ColorCode])
+    color = models.CharField(max_length=20, choices=[(color.name, color.value) for color in ColorCode])
     
     body = models.TextField(null=True, max_length=200)
     
