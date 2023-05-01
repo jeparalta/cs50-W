@@ -1,0 +1,162 @@
+<form id="edit-booking-form" action="{% url 'minilogistic:editbooking' %}" method="POST">
+    {% csrf_token %}
+    <input type="text" hidden value="{{ booking.id }}" name="bookingId">
+    <div class="booking-section">
+        <div class="row booking-form-row">
+            <div class="col-1">
+                <h4><i class="fa-solid fa-house icon-margin-right"></i></h4>
+            </div>
+            <div class="col-4">
+                <select class="form-control" id="locationSelect" name="location" required>
+                    <option value="" selected disabled>Location</option>
+                    {% for location in locations %}
+                        {% if booking.location.id == location.id %}
+                        <option value="{{ location.id }}" selected>{{ location.name }}</option>
+                        {% else %}
+                        <option value="{{ location.id }}">{{ location.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-5">
+                
+            </div>
+            <div class="col-2 ">
+                <p><i class="fa-regular fa-xl fa-trash-can delete-booking"></i></p>
+            </div>
+        </div>
+        
+
+        <div style="padding-top: 31.8px;"  class="row booking-form-row">
+            <div class=" form-group col-md-3 col-sm-12 booking-form-col">
+                <input type="text" placeholder="First Name" class="form-control" id="first-name" name="first_name" value="{{ booking.firstname }}"required>
+            </div>
+            <div class="col-md-3 col-sm-12 form-group booking-form-col">
+                <input type="text" placeholder="Last Name" class="form-control" id="last-name" name="last_name" value="{{ booking.lastname }}" required>
+            </div>
+            <div class="col-md-2 col-sm-12 form-group booking-form-col">
+                <input type="number" placeholder="Guests" class="form-control" id="number-pax" name="number_pax"  value="{{ booking.number_pax }}" required>
+            </div>
+            <div class="col-md-2 col-sm-12 form-group booking-form-col">
+                <input type="email" placeholder="Email" class="form-control" id="guest-email" name="guest_email"  value="{{ booking.email }}" required>
+            </div>
+            <div class="col-md-2 col-sm-12 form-group booking-form-col">
+                <input type="text" placeholder="Phone" class="form-control" id="phone-number" name="phone_number"  value="{{ booking.phone_number }}" required>
+            </div>
+        </div>
+
+        <div class="row booking-form-row">
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <label for="check-in"><p><b><i class="fa-solid fa-calendar-days fa-lg icon-margin-right"></i>Check-in</b></p></label>
+                <input type="date" class="form-control" id="arrival-date" name="arrival_date" value="{{ booking.arrival_date|date:'Y-m-d'}}" required>
+            </div>
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <label for="check-out"><p><b><i class="fa-solid fa-calendar-days fa-lg icon-margin-right"></i>Check-out</b></p></label>
+                <input type="date" class="form-control" id="departure-date" name="departure_date" value="{{ booking.departure_date|date:'Y-m-d'}}" required>
+            </div>
+        </div>
+
+        <div class="row booking-form-row align-items-end">
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <label for="time-input"><p><b><i class="fa-regular fa-clock fa-lg icon-margin-right"></i>Arrival Time</b></p></label>
+                <input type="time" class="form-control" id="arrival-time" name="arrival_time" value="{{ booking.arrival_time|date:'H:i' }}" required>
+            </div>
+            <div class="col-md-4 col-sm-12 form-group booking-form-col">
+                <div class="form-check">
+                    {% if booking.self_check_in %}
+                    <input type="checkbox" class="form-check-input" id="selfCheckin" name="self_check_in" checked>
+                    {% else %} 
+                    <input type="checkbox" class="form-check-input" id="selfCheckin" name="self_check_in">
+                    {% endif %}
+                    <label class="form-check-label" for="selfCheckin"><p><b>Self Check-in</b></p></label>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <div class="row">
+            <div class="comments-section">
+                <div class="col">
+                    <ul class="comment-list">
+                        {% for comment in booking.booking_comments.all %}
+                            <div class="row comment-container-{{comment.id}}">
+                                <div class="col-auto clean-comment-container comment-color-{{comment.color}}">
+                                    <li>{{ comment.body }}</li>
+                                </div>
+                                <div class="col-auto d-flex align-items-center"><p><i data-commentid={{comment.id}} class="fa-solid fa-lg fa-delete-left d-flex align-items-center delete-comment"></i></p></div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+                    
+                    
+                
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                
+                    <input type="text" hidden value="{{ clean.id }}" name="cleanId">
+                    <input type="text" hidden value="{{ day }}" name="selected">
+
+                    <div class="row">
+                        <div class="booking-item-container">
+                            <p><b><i class="fa-regular fa-xl fa-comment-dots icon-margin-right"></i>Comments:</b></p>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-column align-items-end">
+                        <input type="text" placeholder="New Comment" class="form-control mb-2 clean-comment-body" id="comment-body" name="comment_body" >
+                        <div class="row">
+                            <div class="col d-flex align-items-center">
+                                <div class="form-group mb-0">
+                                    <input type="hidden" id="comment-color" name="comment_color">
+                                </div>
+                                
+                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                                        <button type="button" class="btn btn-lg btn-secondary btn-green" data-color="green"></button>
+                                        <button type="button" class="btn btn-lg btn-secondary btn-blue" data-color="blue"></button>
+                                        <button type="button" class="btn btn-lg btn-secondary btn-red" data-color="red"></button>
+                                        <button type="button" class="btn btn-lg btn-secondary btn-grey" data-color="grey"></button>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col">
+                                <!--<button type="submit" class="btn btn-info submit-comment-button clean-comment-button">Add Comment</button>-->
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+            <div class="col">
+
+            </div>
+        </div>
+
+
+
+        <div class="row booking-form-row align-items-end form-button-row">
+            <div class="col-md-4 col-sm-12 form-group booking-form-col text-right">
+                
+            </div>
+    
+            <div class="col-md-4 col-sm-12 form-group booking-form-col d-flex flex-column">
+                <div class="cancel-form-container">
+                    <p class="cancel-form text-right mb-1">Cancel</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-sm-12 form-group booking-form-col text-right">
+                <button type="submit" class="btn btn-info submit-booking-button">Save</button>
+            </div>
+        </div>
+        
+    </div>
+    
+
+</form>
+

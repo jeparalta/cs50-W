@@ -1,0 +1,72 @@
+{% extends "minilogistic/layout.html" %}
+{% load static %}
+
+
+
+{% block body %}
+<h5 class="setting-title" ><b>Account</b></h5>
+<div class="row">
+    <div class="col-3">
+        <form>
+            <select class="form-control" id="Account" name="account" required>
+                
+                        <option value="" selected disabled> {{ selected_account }}</option>
+                        {% for account in accounts %}
+                            <option value="{{ account.id }}">{{ account.name }}</option>
+                        {% endfor %}
+                    
+            </select>
+        </form>
+    </div>
+</div>
+<h5 class="setting-title">Locations</h5>
+<ul>
+    {% for location in locations %} 
+    <li><button class="btn btn-light mb-2"><i class="fa-solid fa-house icon-margin-right"></i>{{ location.name }}</button></li>
+    {% endfor %}
+</ul>
+
+<div class="row">
+    <div class="col-3">
+        <form method="POST" action="{% url 'minilogistic:settings' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Add Location" id="new-location" name="new_location" required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-light"><i class="fa-regular fa-xl fa-square-plus"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h5 class="setting-title">Cleaners</h5>
+<ul>
+    {% for cleaner in cleaners %} 
+    <li><button class="btn btn-light mb-2"><i class="fa-regular fa-user icon-margin-right"></i>{{ cleaner.name }}</button></li>
+    {% endfor %}
+</ul>
+<div class="row">
+    <div class="col-3">
+        <form method="POST" action="{% url 'minilogistic:settings' %}">
+            {% csrf_token %}
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Add Cleaner" id="new-cleaner" name="new_cleaner" required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-light"><i class="fa-regular fa-xl fa-square-plus"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}
+
+
+
+
+
